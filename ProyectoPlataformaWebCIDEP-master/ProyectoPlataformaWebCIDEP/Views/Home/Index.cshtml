@@ -1,0 +1,117 @@
+﻿@model ProyectoPlataformaWebCIDEP.Entity.UsuarioEntity
+
+@{
+    ViewBag.Title = "Home Page";
+    ViewBag.IsIndex = true;
+}
+
+
+<!-- CONTACT -->
+<section id="contact" style="background-color: ;">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-sm-12">
+                @if (Session["ID_Usuario"] == null || !Request.IsAuthenticated)
+                {
+                    using (Html.BeginForm("IniciarSesion", "Autenticacion", FormMethod.Post, new { @id = "contact-form", @role = "form", onsubmit = "convertirAMinusculas()" }))
+                    {
+                        <div class="section-title">
+                            <h2>Ingrese sus credenciales<small>para acceder a la plataforma</small></h2>
+                        </div>
+
+                        <div class="col-md-12 col-sm-12">
+                            @Html.TextBoxFor(m => m.Nombre_Usuario, new { @class = "form-control", @type = "text", @placeholder = "Nombre de usuario", @id = "nombreUsuario" })
+                            @Html.TextBoxFor(m => m.Contrasenna, new { @class = "form-control", @type = "password", @placeholder = "Contraseña" })
+                        </div>
+
+                        <div class="col-md-4 col-sm-4">
+                            <input type="submit" class="form-control" name="send message" value="Iniciar Sesión">
+                        </div>
+                    }
+
+                    <script>
+                        function convertirAMinusculas() {
+                            var nombreUsuarioInput = document.getElementById("nombreUsuario");
+                            nombreUsuarioInput.value = nombreUsuarioInput.value.toLowerCase();
+                        }
+                    </script>
+
+
+                    <script>
+                        function mostrarMensajeTemporal() {
+                            var inputs = document.querySelectorAll('.form-control');
+                            inputs.forEach(function (input) {
+                                var placeholderOriginal = input.getAttribute('placeholder');
+                                var mensajeError = '@ViewBag.resultadoLogin';
+
+                                if (mensajeError !== '') {
+                                    input.setAttribute('placeholder', mensajeError);
+
+                                    // Después de 5 segundos, restaurar el placeholder original
+                                    setTimeout(function () {
+                                        input.setAttribute('placeholder', placeholderOriginal);
+                                    }, 5000);
+                                }
+                            });
+                        }
+                        window.onload = function () {
+                            mostrarMensajeTemporal();
+                        };
+                    </script>
+
+
+
+                    <div class="col-md-8 col-sm-8">
+                        <a href="@Url.Action("RestablecerContrasenna","Autenticacion")" class="btn-link">Recuperar contraseña</a>
+                    </div>
+                    <style>
+                        .btn-link {
+                            margin: 2rem 0 2rem 0;
+                            display: inline-block;
+                            padding: 5px 10px;
+                            border: 1px solid transparent;
+                            border-radius: 4px;
+                            transition: all 0.3s ease;
+                            text-decoration: none;
+                            color: #333;
+                        }
+
+                            .btn-link:hover {
+                                border-color: #ccc;
+                                cursor: pointer;
+                            }
+                    </style>
+
+
+                }
+                else
+                {
+                    <div class="section-title">
+                        @if (Session["ID_Usuario"] != null || Request.IsAuthenticated)
+                        {
+                            if (Session["Nombre"] != null)
+                            {
+                                <h2>Bienvenido al sistema<small style="margin-top: 1rem;">@Session["Nombre"]</small></h2>
+
+                            }
+                            else if (Session["Nombre_Usuario"] != null)
+                            {
+                                <h2>Bienvenido al sistema<small style="margin-top: 1rem;">@Session["Nombre_Usuario"]</small></h2>
+                            }
+                            else
+                            {
+                                FormsAuthentication.SignOut();
+                            }
+                        }
+                    </div>
+                }
+            </div>
+            <div class="col-md-6 col-sm-12">
+                <div class="contact-image">
+                    <img src="~/Template/images/contact-image.jpg" class="img-responsive" alt="Smiling Two Girls">
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>

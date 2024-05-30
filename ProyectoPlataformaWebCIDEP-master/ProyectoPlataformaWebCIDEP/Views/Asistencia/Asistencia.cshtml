@@ -1,0 +1,260 @@
+﻿
+@model ProyectoPlataformaWebCIDEP.Models.AsistenciaModel
+
+@{
+    ViewBag.Title = "Asistencia";
+    Layout = "~/Views/Shared/_Authenticated.cshtml";
+    ViewBag.VistaActiva = "Asistencia";
+    var apiUrl = System.Configuration.ConfigurationManager.AppSettings["urlApi"].ToString();
+
+
+
+}
+
+
+<div class="container">
+    <div class="row">
+        @if ((int)Session["ID_Rol"] == 2 && Session["IDstudentTeacher"] != null)
+        {
+            <input type="hidden" id="idDocente" value="@Session["IDstudentTeacher"]" />
+        }
+
+        <div class="col-md-6 col-sm-6">
+            <h1 class="display-3">Asistencia</h1>
+        </div>
+        <div class="row justify-content-center">
+            <!-- Alerta de éxito -->
+            @if (!string.IsNullOrEmpty(ViewBag.respuesta))
+            {
+                <div class="col-md-8 offset-md-2">
+                    <div id="alerta" class="alert alert-info alert-dismissible fade show text-center" role="alert">
+                        @Html.Raw(ViewBag.respuesta)
+                    </div>
+                </div>
+            }
+
+            <script>
+                $(document).ready(function () {
+                    setTimeout(function () {
+                        $("#alerta").alert('close');
+                    }, 5000);
+                });
+            </script>
+        </div>
+        <div class="row justify-content-center">
+            <!-- Alerta de éxito -->
+            @if (!string.IsNullOrEmpty(ViewBag.emailRespuesta))
+            {
+                <div class="col-md-8 offset-md-2">
+                    <div id="alerta" class="alert alert-info alert-dismissible fade show text-center" role="alert">
+                        @Html.Raw(ViewBag.emailRespuesta)
+                    </div>
+                </div>
+            }
+
+            <script>
+                $(document).ready(function () {
+                    setTimeout(function () {
+                        $("#alerta").alert('close');
+                    }, 5000);
+                });
+            </script>
+        </div>
+
+        <div class="row justify-content-center" style="display:none;">
+            <!-- Alerta de éxito -->
+
+            <div class="col-md-8 offset-md-2">
+                <div id="alertaOtra" class="alert alert-danger alert-dismissible fade show text-center" role="alert">
+                </div>
+            </div>
+
+
+            <script>
+                $(document).ready(function () {
+                    setTimeout(function () {
+                        $("#alertaOtra").alert('close');
+                    }, 5000);
+                });
+            </script>
+        </div>
+    </div>
+
+    <div class="row mb-3" id="period">
+        <div class="col-md-12 col-sm-12">
+            <p>Seleccione un período para ver su asistencia</p>
+            <div class="row">
+                <input type="hidden" name="ID_Clase" value="@Request.QueryString["idClase"]">
+
+                <div class="col-md-4 col-sm-12 mb-4">
+                    <label for="FechaInicio">Fecha de Inicio:</label>
+                    <input id="FechaInicio" name="FechaInicio" type="date">
+                </div>
+                <div class="col-md-4 col-sm-12 mb-4">
+                    <label for="FechaFin">Fecha de Finalización:</label>
+                    <input id="FechaFin" name="FechaFin" type="date">
+                </div>
+                <div class="col-md-2 col-sm-12 mb-4">
+                    <a href="#" id="verAsistencia" class="btn btn-primary">Filtrar</a>
+                </div>
+                <div class="col-md-2 col-sm-12 mb-4">
+                    <a href="@Url.Action("Asistencia", "Asistencia", new { idClase = @Request.QueryString["idClase"]})" class="btn btn-danger">Borrar Filtro</a>
+                </div>
+            </div>
+
+            <script>
+                function construirURL() {
+                    var idClase = $('input[name="ID_Clase"]').val();
+                    var fechaInicio = $('#FechaInicio').val();
+                    var fechaFin = $('#FechaFin').val();
+                    var fechaFinDate = new Date(fechaFin);
+
+
+                    fechaFinDate.setDate(fechaFinDate.getDate() + 1);
+
+                    // Formatear la fechaFin nuevamente como una cadena
+                    var fechaFinNueva = fechaFinDate.toISOString().slice(0, 10);
+
+                    var url = '@Url.Action("Asistencia", "Asistencia")';
+                    url += '?idClase=' + encodeURIComponent(idClase);
+                    url += '&fechaInicio=' + encodeURIComponent(fechaInicio);
+                    url += '&fechaFin=' + encodeURIComponent(fechaFinNueva);
+
+                    return url;
+                }
+
+                function parametrosEnURL() {
+                    var parametros = new URLSearchParams(window.location.search);
+                    return parametros.has('fechaInicio') && parametros.has('fechaFin');
+                }
+
+                $(document).ready(function() {
+                    if (parametrosEnURL()) {
+                        $('#verAsistencia').addClass('disabled');
+                        $('#verAsistencia').attr('href', 'javascript:void(0)'); 
+                    }
+                });
+
+                $('#verAsistencia').click(function (event) {
+                    if (parametrosEnURL()) {
+                        event.preventDefault(); 
+                    } else {
+                        var url = construirURL();
+                        window.location.href = url;
+                    }
+                });
+            </script>
+
+
+
+        </div>
+    </div>
+
+    <div class="row mt-2">
+        <div class="col-md-12 col-sm-12">
+            @if (Model.Asistencia.Count() > 0)
+            {
+
+
+                <table class="table table-bordered table-striped  table-hover nowrap" style="width:100%" id="table-demo">
+                    <thead>
+                        <tr>
+                            <th>Estudiante</th>
+                            <th>Curso</th>
+                            <th>Grado</th>
+                            <th>Estado</th>
+                            <th>Fecha</th>
+                            @if ((int)Session["ID_Rol"] != 3)
+                            {
+                                <th></th>
+
+                            }
+                        </tr>
+                    </thead>
+                    <tbody id="myTable">
+                        @foreach (var asistencia in Model.Asistencia)
+                        {
+                            if (asistencia.Activo)
+                            {
+                                <tr>
+                                    <td>@(asistencia.Nombre + " " + asistencia.PrimerApellido + " " + asistencia.SegundoApellido)</td>
+                                    <td>@asistencia.NombreCurso</td>
+                                    <td>@asistencia.NombreGrado</td>
+                                    <td>@asistencia.NombreEstado</td>
+                                    <td>@asistencia.Fecha_Asistencia.ToString("dd - MMMM - yyyy - hh:mm tt", new System.Globalization.CultureInfo("es-MX"))</td>
+                                    @if ((int)Session["ID_Rol"] != 3)
+                                    {
+                                        <td>
+                                            <a href="@Url.Action("EditarAsistencia", "Asistencia", new { ID_asistencia = asistencia.ID_Asistencia })">Editar</a>
+                                            @if ((int)Session["ID_Rol"] != 3)
+                                            {
+                                                if (asistencia.Activo == true)
+                                                {
+                                                    using (Html.BeginForm("BorrarAsistencia", "Asistencia", FormMethod.Post))
+                                                    {
+                                                        @Html.Hidden("ID_asistencia", asistencia.ID_Asistencia)
+                                                        <button type="submit" class="btn-link" style="border: none; background: none; padding: 0; color: red;">Eliminar</button>
+                                                    }
+                                                }
+
+                                            }
+                                        </td>
+                                    }
+
+                                </tr>
+                            }
+                        }
+
+
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <h3>No hay registros</h3>
+            }
+        </div>
+    </div>
+</div>
+
+
+
+<style>
+    .dataTables_filter input {
+        width: 30vw;
+    }
+</style>
+<script>
+    $(document).ready(function () {
+
+        var table = new DataTable('#table-demo', {
+            responsive: true,
+            columnDefs: [
+                { responsivePriority: 1, targets: 3 },
+                { responsivePriority: 10001, targets: 4 },
+                { responsivePriority: 2, targets: -1 }
+            ],
+            "paging": true,
+            "language": {
+                "lengthMenu": "Mostrar _MENU_ registros por página",
+                "zeroRecords": "No se encontraron registros",
+                "info": "Mostrando página _PAGE_ de _PAGES_",
+                "infoEmpty": "No hay registros disponibles",
+                "infoFiltered": "(filtrados de _MAX_ registros totales)",
+                "search": "Buscar:",
+                "searchPlaceholder": "Ingrese su búsqueda aquí",
+                "paginate": {
+                    "first": "Primero",
+                    "last": "Último",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                }
+            }
+        });
+
+
+    });
+</script>
+
+
+

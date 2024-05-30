@@ -1,0 +1,152 @@
+﻿
+@{
+    ViewBag.Title = "RestableceContrasenna";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var apiUrl = System.Configuration.ConfigurationManager.AppSettings["urlApi"].ToString();
+
+
+}
+
+
+<section id="contact" style="background-color: ;">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-sm-12">
+                <form action="" method="post" id="contact-form" role="form">
+                    <div class="section-title">
+                        <h2>Ingrese su información<small>para restablecer su contraseña</small></h2>
+                    </div>
+
+                    <div class="col-md-12 col-sm-12">
+                        <input id="emailInput" class="form-control" type="email" name="email" placeholder="Correo electrónico" required onkeyup="validateEmail()" />
+                        <span id="emailError" class="error-message" style="color:white;"></span>
+                    </div>
+                    <div id="passwordFields" style="display:none;">
+                        <div class="col-md-12 col-sm-12">
+                            <input id="password1Input" class="form-control" type="password" placeholder="Ingrese su nueva contraseña" required onkeyup="validatePassword()" />
+                            <span id="passwordError" class="error-message" style="color:white;"></span>
+                        </div>
+                        <div class="col-md-12 col-sm-12">
+                            <input id="passwordConfirmInput" class="form-control" type="password" placeholder="Confirme su nueva contraseña" required onkeyup="validatePassword()" />
+                            <span id="passwordConfirmError" class="error-message" style="color:white;"></span>
+                            <span id="userMessages" class="error-message" style="color:white;"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 col-sm-4">
+                        <input id="btnRecuperar" type="button" class="form-control" value="Recuperar" style="display:none;">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<script>
+
+    var urlApi = '@apiUrl';
+
+    function validateEmail() {
+
+        var email = document.getElementById("emailInput").value;
+        var emailRegex = /^[^\s@@]+@@[^\s@@]+\.[^\s@@]+$/;
+        var emailError = document.getElementById("emailError");
+
+        if (!emailRegex.test(email)) {
+            document.getElementById("passwordFields").style.display = "none";
+            emailError.textContent = "Email de formato inválido";
+        } else {
+            document.getElementById("emailInput").setCustomValidity("");
+            emailError.textContent = "";
+            document.getElementById("passwordFields").style.display = "block"; //aquí muestro los inputs de password cuando el email es válido
+        }
+    }
+
+    function validatePassword() {
+        console.log("Validating password...");
+        var password = document.getElementById("password1Input").value;
+        var confirmPassword = document.getElementById("passwordConfirmInput").value;
+
+        var passwordError = document.getElementById("passwordError");
+        var passwordConfirmError = document.getElementById("passwordConfirmError");
+
+        var eightToTwelveChars = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@@#$%^&*])[a-zA-Z0-9!@@#$%^&*]{8,12}$/;
+        var isValidPassword = eightToTwelveChars.test(password);
+
+
+        if (!isValidPassword) {
+            passwordError.textContent = "La contraseña debe tener entre 8 y 12 caracteres y contener al menos un número, una letra mayúscula y un carácter especial.";
+            passwordConfirmError.textContent = "";
+            document.getElementById("btnRecuperar").style.display = "none";
+
+        } else if (password !== confirmPassword) {
+            passwordError.textContent = "";
+            passwordConfirmError.textContent = "Las contraseñas no coinciden.";
+            document.getElementById("btnRecuperar").style.display = "none";
+
+        } else {
+            passwordError.textContent = "";
+            passwordConfirmError.textContent = "";
+            document.getElementById("btnRecuperar").style.display = "block";
+        }
+    }
+
+
+    var btnRecuperar = document.getElementById("btnRecuperar");
+
+    btnRecuperar.addEventListener("click", function () {
+        var emailInput = document.getElementById("emailInput");
+        var password1Input = document.getElementById("password1Input");
+        var passwordConfirmInput = document.getElementById("passwordConfirmInput");
+        var userMessages = document.getElementById("userMessages");
+
+        if (emailInput.checkValidity() && password1Input.checkValidity() && passwordConfirmInput.checkValidity()) {
+
+            var urlParams = new URLSearchParams(window.location.search);
+            var token = urlParams.get('key');
+            var email = emailInput.value;
+            var nuevaContrasenna = passwordConfirmInput.value;
+
+            var data = {
+                Token: token,
+                Email: email,
+                NuevaContrasenna: nuevaContrasenna
+            };
+
+
+            fetch(`${urlApi}RecuperarContrasennaPaso2`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                mode: 'cors',
+                body: JSON.stringify(data)
+            })
+                .then(response => {
+                    if (response.ok) {
+
+                        userMessages.textContent = "Actualización exitosa";
+                        password1Input.style.display = "none";
+                        passwordConfirmInput.style.display = "none";
+                        btnRecuperar.style.display = "none";
+                        emailInput.setAttribute("readonly", true);
+
+                        //console.log('Solicitud exitosa');
+                    } else {
+                        userMessages.textContent = "Error en la recuperación de contraseña";
+                        throw new Error('Error en la solicitud: ' + response.status);
+                    }
+                })
+                .catch(error => {
+                    // Manejar errores de la solicitud fetch
+                    userMessages.textContent = "Error en la recuperación de contraseña";
+                    //console.error('Error en la solicitud fetch:', error);
+                });
+        } else {
+            btnRecuperar.disabled = true;
+        }
+    });
+
+</script>

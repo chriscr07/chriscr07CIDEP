@@ -1,0 +1,158 @@
+﻿
+@model ProyectoPlataformaWebCIDEP.Entity.AsistenciaEntity
+
+@{
+    ViewBag.Title = "Asistencia";
+    Layout = "~/Views/Shared/_Authenticated.cshtml";
+    ViewBag.VistaActiva = "Asistencia";
+}
+
+
+<div class="container">
+
+    <div class="row">
+
+        <div class="col-md-6 col-sm-6">
+            <div class="dropdown">
+                <button class="btn btn-link dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <h2>Avisos</h2>
+                </button>
+                @if ((int)Session["ID_Rol"] == 1)
+                {
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="@Url.Action("CrearAsistencia", "Asistencia")">Agregar Asistencia</a>
+                    </div>           
+                }
+                else if ((int)Session["ID_Rol"] == 2)
+                {
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="@Url.Action("CrearAsistencia", "Asistencia")">Agregar Asistencia</a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-md-4 col-sm-6">
+            <button id="verEstudiante" type="button" class="btn btn-outline-primary">Ver por Estudiante</button>
+        </div>
+        <div class="col-md-4 col-sm-6">
+            <button id="verPeriodo" type="button" class="btn btn-outline-primary">Ver por Período</button>
+        </div>
+        <div class="col-md-4 col-sm-6">
+            <button id="verGrado" type="button" class="btn btn-outline-primary">Ver por Grado</button>
+        </div>
+    </div>
+
+    <div class="row" id="student" style="display: none;">
+        <div class="col-md-6 col-sm-12">
+            <p>Seleccione un estudiante para ver su asistencia</p>
+            @using (Html.BeginForm("Asistencia", "Asistencia", FormMethod.Get))
+            {
+                <label for="Estudiante">Estudiante:</label>
+                @Html.DropDownList("ID_Estudiante", ViewBag.ListaAsistencia as SelectList, "Seleccione un estudiante", new { @class = "form-control", @required = "required", @id = "ddlEstudiante" })
+                <button type="submit" class="btn btn-primary" style="margin: 1rem 0 1rem 0;">Ver Asistencia</button>
+            }
+        </div>
+        <div class="col-md-6 col-sm-12">
+            <p>Ingrese el nombre de un estudiante para filtrar</p>
+            <label for="Curso">Filtrar Estudiante:</label>
+            <input id="txtFiltroEstudiante" type="text" class="form-control" placeholder="Ingrese su búsqueda">
+        </div>
+    </div>
+
+    <div class="row" id="grade" style="display: none;">
+        <div class="col-md-6 col-sm-12">
+            <p>Seleccione un grado para ver su asistencia</p>
+            @using (Html.BeginForm("Asistencia", "Asistencia", FormMethod.Get))
+            {
+                <label for="Estudiante">Grado:</label>
+                @Html.DropDownList("ID_Grado", ViewBag.ListaGrados as SelectList, "Seleccione un grado", new { @class = "form-control", @required = "required", @id = "ddlGrado" })
+                <button type="submit" class="btn btn-primary" style="margin: 1rem 0 1rem 0;">Ver Asistencia</button>
+            }
+        </div>
+        <div class="col-md-6 col-sm-12">
+            <p>Ingrese el nombre de un grado para filtrar</p>
+            <label for="Grado">Filtrar Grado:</label>
+            <input id="txtFiltroGrado" type="text" class="form-control" placeholder="Ingrese su búsqueda">
+        </div>
+    </div>
+
+    <div class="row" id="period" style="display: none;">
+        <div class="col-md-12 col-sm-12">
+            <p>Seleccione un período para ver su asistencia</p>
+            @using (Html.BeginForm("Asistencia", "Asistencia", FormMethod.Get))
+            {
+                <div class="row">
+                    <div class="col-md-6 col-sm-12">
+                        <label for="FechaInicio">Fecha de Inicio:</label>
+                        @Html.TextBoxFor(m => m.FechaInicio, new { @class = "form-control", @type = "date", @placeholder = "Fecha de Nacimiento" })
+                    </div>
+                    <div class="col-md-6 col-sm-12">
+                        <label for="FechaFin">Fecha de Finalización:</label>
+                        @Html.TextBoxFor(m => m.FechaFin, new { @class = "form-control", @type = "date", @placeholder = "Fecha de Nacimiento" })
+                    </div>
+                    <div class="col-md-6 col-sm-12">
+                        <button type="submit" class="btn btn-primary" style="margin: 1rem 0 1rem 0;">Ver Asistencia</button>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        $('#txtFiltroEstudiante').on('input', function () {
+            var filtro = $(this).val().toLowerCase();
+            $('#ddlEstudiante option').each(function () {
+                var opcion = $(this).text().toLowerCase();
+                var mostrar = opcion.includes(filtro);
+                $(this).toggle(mostrar);
+            });
+        });
+
+        $('#txtFiltroGrado').on('input', function () {
+            var filtro = $(this).val().toLowerCase();
+            $('#ddlGrado option').each(function () {
+                var opcion = $(this).text().toLowerCase();
+                var mostrar = opcion.includes(filtro);
+                $(this).toggle(mostrar);
+            });
+        });
+    });
+</script>
+
+
+<script>
+    $(document).ready(function () {
+        $('#verEstudiante').click(function () {
+            $(this).prop('disabled', true);
+            $('#verPeriodo').prop('disabled', false);
+            $('#verGrado').prop('disabled', false);
+            $('#student').show();
+            $('#period').hide();
+            $('#grade').hide();
+        });
+
+        $('#verPeriodo').click(function () {
+            $(this).prop('disabled', true);
+            $('#verEstudiante').prop('disabled', false);
+            $('#verGrado').prop('disabled', false);
+            $('#student').hide();
+            $('#period').show();
+            $('#grade').hide();
+        });
+
+        $('#verGrado').click(function () {
+            $(this).prop('disabled', true);
+            $('#verEstudiante').prop('disabled', false);
+            $('#verPeriodo').prop('disabled', false);
+            $('#student').hide();
+            $('#period').hide();
+            $('#grade').show();
+        });
+    });
+</script>

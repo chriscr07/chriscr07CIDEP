@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="c74066d017f14e3b95ed80842fc1c4b5" Name="Diagram1">
+        <EntityTypeShape EntityType="proyectocidepModel.Asistencia" Width="1.5" PointX="7.5" PointY="47.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="proyectocidepModel.AuditoriaAdministracion" Width="1.5" PointX="5.25" PointY="17.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="proyectocidepModel.AuditoriaAsistencia" Width="1.5" PointX="5.25" PointY="27.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="proyectocidepModel.AuditoriaAvisosGenerales" Width="1.5" PointX="8.25" PointY="27.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="proyectocidepModel.AuditoriaCalificaciones" Width="1.5" PointX="5.25" PointY="23.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="proyectocidepModel.AuditoriaClases" Width="1.5" PointX="5.25" PointY="31.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="proyectocidepModel.AuditoriaDocentes" Width="1.5" PointX="7.5" PointY="35.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="proyectocidepModel.AuditoriaEstudiantes" Width="1.5" PointX="7.5" PointY="39.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="proyectocidepModel.AuditoriaIniciosSesion" Width="1.5" PointX="5.25" PointY="40.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="proyectocidepModel.AvisosGenerales" Width="1.5" PointX="6" PointY="14.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="proyectocidepModel.Calificaciones" Width="1.5" PointX="10.5" PointY="47.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="proyectocidepModel.Clases" Width="1.5" PointX="5.25" PointY="61.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="proyectocidepModel.Configuraciones" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="proyectocidepModel.Cursos" Width="1.5" PointX="3" PointY="60.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="proyectocidepModel.Docentes" Width="1.5" PointX="5.25" PointY="43.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="proyectocidepModel.DocentesClases" Width="1.5" PointX="7.5" PointY="44" IsExpanded="true" />
+        <EntityTypeShape EntityType="proyectocidepModel.EstadosAsistencia" Width="1.5" PointX="5.25" PointY="38" IsExpanded="true" />
+        <EntityTypeShape EntityType="proyectocidepModel.Estudiantes" Width="1.5" PointX="5.25" PointY="47.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="proyectocidepModel.EstudiantesGrados" Width="1.5" PointX="7.5" PointY="52.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="proyectocidepModel.EstudiantesPadres" Width="1.5" PointX="10.5" PointY="44.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="proyectocidepModel.Grados" Width="1.5" PointX="3" PointY="63.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="proyectocidepModel.IniciosSesion" Width="1.5" PointX="5.25" PointY="51.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="proyectocidepModel.Mensajeria" Width="1.5" PointX="5.25" PointY="54.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="proyectocidepModel.Padres" Width="1.5" PointX="8.25" PointY="32" IsExpanded="true" />
+        <EntityTypeShape EntityType="proyectocidepModel.Roles" Width="1.5" PointX="0.75" PointY="28.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="proyectocidepModel.TiposEvaluaciones" Width="1.5" PointX="8.25" PointY="55.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="proyectocidepModel.Tokens" Width="1.5" PointX="5.25" PointY="57.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="proyectocidepModel.Usuarios" Width="1.5" PointX="3" PointY="26.25" IsExpanded="true" />
+        <AssociationConnector Association="proyectocidepModel.FK__Asistenci__ID_Cl__6383C8BA" ManuallyRouted="false" />
+        <AssociationConnector Association="proyectocidepModel.FK__Asistenci__ID_Es__6477ECF3" ManuallyRouted="false" />
+        <AssociationConnector Association="proyectocidepModel.FK__Asistenci__ID_Es__656C112C" ManuallyRouted="false" />
+        <AssociationConnector Association="proyectocidepModel.FK__Auditoria__ID_As__6754599E" ManuallyRouted="false" />
+        <AssociationConnector Association="proyectocidepModel.FK__Auditoria__ID_Us__66603565" ManuallyRouted="false" />
+        <AssociationConnector Association="proyectocidepModel.FK__Auditoria__ID_Us__68487DD7" ManuallyRouted="false" />
+        <AssociationConnector Association="proyectocidepModel.FK__Auditoria__Avisos" ManuallyRouted="false" />
+        <AssociationConnector Association="proyectocidepModel.FK__Auditoria__Usuarios" ManuallyRouted="false" />
+        <AssociationConnector Association="proyectocidepModel.FK__Auditoria__ID_Ca__6C190EBB" ManuallyRouted="false" />
+        <AssociationConnector Association="proyectocidepModel.FK__Auditoria__ID_Us__6D0D32F4" ManuallyRouted="false" />
+        <AssociationConnector Association="proyectocidepModel.FK__Auditoria__ID_Cl__6E01572D" ManuallyRouted="false" />
+        <AssociationConnector Association="proyectocidepModel.FK__Auditoria__ID_Us__6EF57B66" ManuallyRouted="false" />
+        <AssociationConnector Association="proyectocidepModel.FK_AuditoriaDocentes_Docentes" ManuallyRouted="false" />
+        <AssociationConnector Association="proyectocidepModel.FK_AuditoriaDocentes_Usuarios" ManuallyRouted="false" />
+        <AssociationConnector Association="proyectocidepModel.FK_AuditoriaEstudiantes_Estudiantes" ManuallyRouted="false" />
+        <AssociationConnector Association="proyectocidepModel.FK_AuditoriaEstudiantes_Usuarios" ManuallyRouted="false" />
+        <AssociationConnector Association="proyectocidepModel.FK__Auditoria__ID_Us__6FE99F9F" ManuallyRouted="false" />
+        <AssociationConnector Association="proyectocidepModel.FK__Calificac__ID_Es__70DDC3D8" ManuallyRouted="false" />
+        <AssociationConnector Association="proyectocidepModel.FK__Calificac__ID_Ti__71D1E811" ManuallyRouted="false" />
+        <AssociationConnector Association="proyectocidepModel.FK__Clases__ID_Curso__72C60C4A" ManuallyRouted="false" />
+        <AssociationConnector Association="proyectocidepModel.FK__Clases__ID_Grado__73BA3083" ManuallyRouted="false" />
+        <AssociationConnector Association="proyectocidepModel.FK__DocentesC__ID_Cl__0D44F85C" ManuallyRouted="false" />
+        <AssociationConnector Association="proyectocidepModel.FK__Docentes__ID_Usu__74AE54BC" ManuallyRouted="false" />
+        <AssociationConnector Association="proyectocidepModel.FK__DocentesC__ID_Do__0C50D423" ManuallyRouted="false" />
+        <AssociationConnector Association="proyectocidepModel.FK__Estudiant__ID_Es__76969D2E" ManuallyRouted="false" />
+        <AssociationConnector Association="proyectocidepModel.FK__Estudiant__ID_Us__75A278F5" ManuallyRouted="false" />
+        <AssociationConnector Association="proyectocidepModel.FK_EstudiantesPadres_Estudiantes" ManuallyRouted="false" />
+        <AssociationConnector Association="proyectocidepModel.FK__Estudiant__ID_Gr__778AC167" ManuallyRouted="false" />
+        <AssociationConnector Association="proyectocidepModel.FK_EstudiantesPadres_Padres" ManuallyRouted="false" />
+        <AssociationConnector Association="proyectocidepModel.FK_IniciosSesion_Usuarios" ManuallyRouted="false" />
+        <AssociationConnector Association="proyectocidepModel.FK__Mensajeri__Desti__797309D9" ManuallyRouted="false" />
+        <AssociationConnector Association="proyectocidepModel.FK__Mensajeri__Remit__7A672E12" ManuallyRouted="false" />
+        <AssociationConnector Association="proyectocidepModel.FK__Usuarios__ID_Rol__7C4F7684" ManuallyRouted="false" />
+        <AssociationConnector Association="proyectocidepModel.FK__Tokens__ID_Usuar__7B5B524B" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="proyectocidepModel.ArchivosCSV" Width="1.5" PointX="3.375" PointY="0.75" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

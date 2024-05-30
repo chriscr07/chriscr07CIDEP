@@ -1,0 +1,153 @@
+﻿@model ProyectoPlataformaWebCIDEP.Entity.DocenteEntity
+
+@{
+    ViewBag.Title = "RegistrarDocente";
+    Layout = "~/Views/Shared/_Authenticated.cshtml";
+    ViewBag.VistaActiva = "Administracion";
+}
+
+
+<div class="container">
+    <section id="contact">
+        <div class="container">
+            <div class="row">
+
+                <div class="col-md-12 col-sm-12">
+                    <div class="row">
+                        <div class="col-md-6 col-sm-12" style="padding: 0.5rem;">
+                            <button id="btnllenadoManual" type="button" class="btn btn-outline-primary">Llenado Manual</button>
+                            <button id="btnllenadoAutomatico" type="button" class="btn btn-outline-primary" style="display:none;">Llenado Automático</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 col-sm-12" id="llenadoAutomatico">
+                    @using (Html.BeginForm("RegistrarDocente", "Docentes", FormMethod.Post))
+                    {
+                        <div class="section-title text-center">
+                            <h2>Agregar Docente</h2>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-sm-12" style="padding: 0.5rem;">
+                                <label for="Cedula">Cédula:</label>
+                                @Html.TextBoxFor(m => m.Cedula, new { @class = "form-control", @placeholder = "Cédula", @type = "text", @required = "required", @id = "cedulaInput", @onkeyup = "consultarCedula()" })
+                            </div>
+                            <div class="col-md-6 col-sm-12" style="padding: 0.5rem;">
+                                <label for="Nombre">Nombre:</label>
+                                @Html.TextBoxFor(m => m.Nombre, new { @class = "form-control", @type = "text", @placeholder = "Nombre", @readonly = "readonly", @id = "nombreInput" })
+                            </div>
+                            <div class="col-md-6 col-sm-12" style="padding: 0.5rem;">
+                                <label for="PrimerApellido">Primer Apellido:</label>
+                                @Html.TextBoxFor(m => m.PrimerApellido, new { @class = "form-control", @type = "text", @placeholder = "Primer Apellido", @readonly = "readonly", @id = "primerApellidoInput" })
+                            </div>
+                            <div class="col-md-6 col-sm-12" style="padding: 0.5rem;">
+                                <label for="SegundoApellido">Segundo Apellido:</label>
+                                @Html.TextBoxFor(m => m.SegundoApellido, new { @class = "form-control", @type = "text", @placeholder = "Segundo Apellido", @readonly = "readonly", @id = "segundoApellidoInput" })
+                            </div>
+                            <div class="col-md-6 col-sm-12" style="padding: 0.5rem;">
+                                <label for="FechaNacimiento">Fecha de Nacimiento:</label>
+                                @Html.TextBoxFor(m => m.FechaNacimiento, new { @class = "form-control", @type = "date", @placeholder = "Fecha de Nacimiento" })
+                            </div>
+                            <div class="col-md-6 col-sm-12" style="padding: 0.5rem;">
+                                <label for="ID_Usuario">Usuario asociado:</label>
+                                @Html.DropDownList("ID_Usuario", ViewBag.listaUsuarios as SelectList, "Seleccione el usuario", new { @class = "form-control" })
+                            </div>
+                            <div class="col-12 text-center" style="padding: 0.5rem;">
+                                <input type="submit" class="btn btn-primary" value="Registrar">
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <div class="col-md-12 col-sm-12" style="display:none;" id="llenadoManual">
+                    @using (Html.BeginForm("RegistrarDocente", "Docentes", FormMethod.Post))
+                    {
+                        <div class="section-title text-center">
+                            <h2>Agregar Docente</h2>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-sm-12" style="padding: 0.5rem;">
+                                <label for="Cedula">Cédula:</label>
+                                @Html.TextBoxFor(m => m.Cedula, new { @class = "form-control", @placeholder = "Cédula", @type = "text", @required = "required" })
+                            </div>
+                            <div class="col-md-6 col-sm-12" style="padding: 0.5rem;">
+                                <label for="Nombre">Nombre:</label>
+                                @Html.TextBoxFor(m => m.Nombre, new { @class = "form-control", @type = "text", @placeholder = "Nombre" })
+                            </div>
+                            <div class="col-md-6 col-sm-12" style="padding: 0.5rem;">
+                                <label for="PrimerApellido">Primer Apellido:</label>
+                                @Html.TextBoxFor(m => m.PrimerApellido, new { @class = "form-control", @type = "text", @placeholder = "Primer Apellido" })
+                            </div>
+                            <div class="col-md-6 col-sm-12" style="padding: 0.5rem;">
+                                <label for="SegundoApellido">Segundo Apellido:</label>
+                                @Html.TextBoxFor(m => m.SegundoApellido, new { @class = "form-control", @type = "text", @placeholder = "Segundo Apellido" })
+                            </div>
+                            <div class="col-md-6 col-sm-12" style="padding: 0.5rem;">
+                                <label for="FechaNacimiento">Fecha de Nacimiento:</label>
+                                @Html.TextBoxFor(m => m.FechaNacimiento, new { @class = "form-control", @type = "date", @placeholder = "Fecha de Nacimiento" })
+                            </div>
+                            <div class="col-md-6 col-sm-12" style="padding: 0.5rem;">
+                                <label for="ID_Usuario">Usuario asociado:</label>
+                                @Html.DropDownList("ID_Usuario", ViewBag.listaUsuarios as SelectList, "Seleccione el usuario", new { @class = "form-control" })
+                            </div>
+                            <div class="col-12 text-center" style="padding: 0.5rem;">
+                                <input type="submit" class="btn btn-primary" value="Registrar">
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+
+
+<script>
+
+    window.addEventListener("DOMContentLoaded", function () {
+
+        document.getElementById("btnllenadoManual").addEventListener("click", function () {
+            var divLlenadoManual = document.getElementById("llenadoManual");
+            var divLlenadoAutomatico = document.getElementById("llenadoAutomatico");
+            var btnManual = document.getElementById("btnllenadoManual");
+            var btnAutomatico = document.getElementById("btnllenadoAutomatico");
+
+            divLlenadoManual.style.display = "block";
+            divLlenadoAutomatico.style.display = "none";
+            btnManual.style.display = "none";
+            btnAutomatico.style.display = "block";
+        });
+
+        document.getElementById("btnllenadoAutomatico").addEventListener("click", function () {
+            var divLlenadoManual = document.getElementById("llenadoManual");
+            var divLlenadoAutomatico = document.getElementById("llenadoAutomatico");
+            var btnManual = document.getElementById("btnllenadoManual");
+            var btnAutomatico = document.getElementById("btnllenadoAutomatico");
+
+            divLlenadoManual.style.display = "none";
+            divLlenadoAutomatico.style.display = "block";
+            btnManual.style.display = "block";
+            btnAutomatico.style.display = "none";
+        });
+    });
+    function consultarCedula() {
+        var cedula = document.getElementById("cedulaInput").value;
+
+        fetch("https://apis.gometa.org/cedulas/" + cedula)
+            .then(response => response.json())
+            .then(data => {
+                var nombre = data.results[0].firstname;
+                var primerApellido = data.results[0].lastname1;
+                var segundoApellido = data.results[0].lastname2;
+
+                document.getElementById("nombreInput").value = capitalizeFirstLetter(nombre);
+                document.getElementById("primerApellidoInput").value = capitalizeFirstLetter(primerApellido);
+                document.getElementById("segundoApellidoInput").value = capitalizeFirstLetter(segundoApellido);
+            })
+            .catch(error => console.error("Error al consultar la cédula:", error));
+    }
+
+    function capitalizeFirstLetter(str) {
+        return str.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+    }
+</script>

@@ -1,0 +1,153 @@
+﻿
+@{
+    ViewBag.Title = "RestablecerContraseña";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var apiUrl = System.Configuration.ConfigurationManager.AppSettings["urlApi"].ToString();
+
+}
+
+<section id="contact">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-sm-12">
+                <form action="" method="post" id="contact-form" role="form">
+                    <div class="section-title">
+                        <h2>Ingrese su correo electrónico<small>para restablecer su contraseña</small></h2>
+                    </div>
+                    <div class="col-md-12 col-sm-12">
+                        <input id="emailInput" class="form-control" type="email" name="email" value="" required  onkeyup="validateEmail()"/>
+                        <span id="emailMessage" class="error-message" style="color:white;"></span>
+                    </div>
+                    <div class="col-md-4 col-sm-4">
+                        <input id="btnRecuperar" type="button" class="form-control" value="Recuperar" style="display:none;">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+
+    var urlApi = '@apiUrl';
+
+    function validateEmail() {
+
+        var email = document.getElementById("emailInput").value;
+        var emailRegex = /^[^\s@@]+@@[^\s@@]+\.[^\s@@]+$/;
+        var emailMessage = document.getElementById("emailMessage");
+
+        if (!emailRegex.test(email)) {
+            emailMessage.textContent = "Email de formato inválido";
+        } else {
+            document.getElementById("emailInput").setCustomValidity("");
+            emailMessage.textContent = "";
+            var btnRecuperar = document.getElementById("btnRecuperar").style.display = "block";
+        }
+    }
+
+    document.getElementById("btnRecuperar").addEventListener("click", function () {
+        var email = document.getElementById("emailInput").value;
+        var emailMessage = document.getElementById("emailMessage");
+        var btnRecuperar = document.getElementById("btnRecuperar");
+        //console.log("Email obtenido:", email);
+        btnRecuperar.style.display = "none";
+        var data = {
+            Email: email
+        };
+        //console.log("Datos a enviar:", data);
+
+        fetch(`${urlApi}RecuperarContrasennaPaso1`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            mode: 'cors',
+            body: JSON.stringify(data)
+        })
+            .then(response => {
+                //console.log("Respuesta recibida:", response);
+
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Error en la solicitud: ' + response.status);
+                }
+            })
+            .then(data => {
+                //console.log("Datos de respuesta del servidor:", data);
+
+                var ID_Usuario = data.ID_Usuario;
+
+                fetch(`${urlApi}VerUsuarioPorId?ID_Usuario=${ID_Usuario}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    mode: 'cors'
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            return response.json();
+                        } else {
+                            throw new Error('Error en la solicitud: ' + response.status);
+                        }
+                    })
+                    .then(usuario => {
+                        //console.log("Datos de usuario obtenidos:", usuario);
+
+                        var nombreDestinatario = usuario.Nombre_Usuario; //aqui posteriormente hay que obtener el nombre no el username
+
+                        var correoData = {
+                            Destinatario: email,
+                            Asunto: "Restablecimiento de contraseña",
+                            Token: data.Token,
+                            NombreDestinatario: nombreDestinatario
+                        };
+
+                        var urlProyectoWeb = window.location.protocol + "//" + window.location.host;
+
+
+                        fetch(`${urlApi}EnviarCorreoElectronico?urlProyectoWeb=${urlProyectoWeb}`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            mode: 'cors',
+                            body: JSON.stringify(correoData)
+                        })
+                            .then(response => {
+                                if (response.ok) {
+                                    emailMessage.textContent = "Correo de recuperación enviado exitosamente";
+                                } else {
+                                    throw new Error('Error en la solicitud: ' + response.status);
+                                }
+                            })
+                            .catch(error => {
+                                emailMessage.textContent = "No se pudo enviar su correo de recuperación";
+                            });
+                    })
+                    .catch(error => {
+                        //console.error('Error al obtener datos del usuario:', error);
+                        emailMessage.textContent = "No se pudo enviar su correo de recuperación";
+                    });
+            })
+            .catch(error => {
+                //console.error('Error al recuperar contraseña:', error);
+                var inputEmail = document.getElementById("emailInput");
+                emailMessage.textContent = "Usuario no encontrado";
+                inputEmail.value = "";
+
+                var originalBackgroundColor = inputEmail.style.backgroundColor;
+
+                inputEmail.style.backgroundColor = "#dc3545";
+
+                setTimeout(function () {
+                    inputEmail.style.backgroundColor = originalBackgroundColor;
+                }, 1000);
+
+                btnRecuperar.style.display = "block";
+            });
+    });
+</script>
+

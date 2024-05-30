@@ -1,0 +1,42 @@
+﻿@model ProyectoPlataformaWebCIDEP.Entity.UsuarioEntity
+
+@{
+    Layout = "~/Views/Shared/_Authenticated.cshtml";
+    ViewBag.VistaActiva = "Administracion";
+}
+
+<div class="container">
+    <section id="contact">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 col-sm-12">
+                    @using (Html.BeginForm("RegistrarUsuario", "Usuarios", FormMethod.Post))
+                    {
+                        <div class="section-title text-center">
+                            <h2>Agregar Usuario</h2>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-sm-12" style="padding: 0.5rem;">
+                                @Html.TextBoxFor(m => m.Nombre_Usuario, new { @class = "form-control", @placeholder = "Nombre de usuario", @type = "text", @required = "required" })
+                            </div>
+                            <div class="col-md-6 col-sm-12" style="padding: 0.5rem;">
+                                @Html.DropDownList("ID_RolUsuarioNuevo", ViewBag.ListaRoles as SelectList, "Seleccione el rol", new { @class = "form-control", @required = "required" })
+                            </div>
+         
+                            <div class="col-md-12 col-sm-12" style="padding: 0.5rem;">
+                                @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @placeholder = "Correo electrónico", @type = "email", @required = "required" })
+                            </div>
+
+                            <div class="col-12 text-center" style="padding: 0.5rem;">
+                                <input type="submit" class="btn btn-primary" value="Registrar">
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+
+

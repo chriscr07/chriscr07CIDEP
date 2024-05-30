@@ -1,0 +1,39 @@
+﻿
+
+@{
+    ViewBag.Title = "Main";
+    Layout = "~/Views/Shared/_Authenticated.cshtml";
+    ViewBag.VistaActiva = "Informes";
+}
+
+
+<div class="col-md-12 col-sm-12">
+    <div class="row">
+        <div class="col-lg-4 col-md-6 col-sm-12" style="padding: 0.5rem;">
+            <div class="card">
+                <div class="card-header">
+                    Informes
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Calificaciones</h5>
+                    <p class="card-text">Informes de calificaciones</p>
+                    <a href="@Url.Action("InformeCalificaciones","Informes")" class="btn btn-primary">Ver</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-6 col-sm-12" style="padding: 0.5rem;">
+            <div class="card">
+                <div class="card-header">
+                    Informes
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Asistencia</h5>
+                    <p class="card-text">Informes de asistencia</p>
+                    <a href="@Url.Action("InformeAsistencia","Informes")" class="btn btn-primary">Ver</a>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>

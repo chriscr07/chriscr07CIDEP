@@ -1,0 +1,87 @@
+﻿
+@model ProyectoPlataformaWebCIDEP.Models.AuditoriasModel
+
+@{
+    Layout = "~/Views/Shared/_Authenticated.cshtml";
+    ViewBag.VistaActiva = "Administracion";
+}
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 col-sm-12" style="padding: 1rem;">
+            <h2>Auditoría de Estudiantes</h2>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 col-sm-12">
+            @if (Model.Auditorias.Count() > 0)
+            {
+                <table class="table table-bordered table-striped" id="table-demo">
+                    <thead>
+                        <tr>
+                            <th>ID de Usuario</th>
+                            <th>Nombre de Usuario</th>
+                            <th>Nombre de Estudiante</th>
+                            <th>Acción</th>
+                            <th>Detalles</th>
+                            <th>Fecha</th>
+                        </tr>
+                    </thead>
+                    <tbody id="myTable">
+                        @foreach (var auditoria in Model.Auditorias)
+                        {
+                            <tr>
+                                <td>@auditoria.ID_Usuario</td>
+                                <td>@auditoria.Nombre_Usuario</td>
+                                <td>@auditoria.NombreEstudiante</td>
+                                <td>@auditoria.Accion</td>
+                                <td>@auditoria.Detalles</td>
+                                <td>@auditoria.Fecha_Accion.ToString("dd - MMMM - yyyy hh:mm:ss tt", new System.Globalization.CultureInfo("es-MX"))</td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <h3>No hay registros</h3>
+            }
+        </div>
+
+    </div>
+</div>
+<style>
+    .dataTables_filter input {
+        width: 30vw;
+    }
+</style>
+<script>
+    $(document).ready(function () {
+
+        var table = new DataTable('#table-demo', {
+            "paging": true,
+            "language": {
+                "lengthMenu": "Mostrar _MENU_ registros por página",
+                "zeroRecords": "No se encontraron registros",
+                "info": "Mostrando página _PAGE_ de _PAGES_",
+                "infoEmpty": "No hay registros disponibles",
+                "infoFiltered": "(filtrados de _MAX_ registros totales)",
+                "search": "Buscar:",
+                "searchPlaceholder": "Ingrese su búsqueda aquí",
+                "paginate": {
+                    "first": "Primero",
+                    "last": "Último",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                }
+            }
+        });
+
+
+    });
+</script>
+
+

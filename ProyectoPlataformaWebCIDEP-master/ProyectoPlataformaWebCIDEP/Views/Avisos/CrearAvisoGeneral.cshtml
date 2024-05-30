@@ -1,0 +1,27 @@
+﻿@model ProyectoPlataformaWebCIDEP.Entity.AvisoGeneralEntity
+
+@{
+    Layout = "~/Views/Shared/_Authenticated.cshtml";
+    ViewBag.VistaActiva = "Comunicaciones";
+}
+
+<div class="col-md-12 col-sm-12">
+    @using (Html.BeginForm("CrearAvisoGeneral", "Avisos", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="section-title text-center">
+            <h2>Agregar Comunicado</h2>
+        </div>
+        <div class="row">
+            <div class="col-md-6 offset-md-3 col-sm-12" style="padding: 0.5rem;">
+                <label for="Mensaje">Mensaje:</label>
+                @Html.TextAreaFor(m => m.Mensaje, new { @class = "form-control", @placeholder = "Mensaje", @maxlength = "300", @required = "required", @id = "mensaje", @rows = "5" })
+            </div>
+            <div class="col-12 text-center" style="padding: 0.5rem;">
+                <input type="hidden" name="FechaPublicacion" value="@DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")" />
+                <input type="submit" class="btn btn-primary" value="Registrar">
+            </div>
+        </div>
+    }
+</div>

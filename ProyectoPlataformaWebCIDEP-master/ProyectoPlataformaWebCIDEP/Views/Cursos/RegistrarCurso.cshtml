@@ -1,0 +1,39 @@
+﻿@model ProyectoPlataformaWebCIDEP.Entity.CursoEntity
+
+@{
+    Layout = "~/Views/Shared/_Authenticated.cshtml";
+    ViewBag.VistaActiva = "Administracion";
+}
+
+<div class="container">
+    <section id="contact">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 col-sm-12">
+                    @using (Html.BeginForm("RegistrarCurso", "Cursos", FormMethod.Post))
+                    {
+                        <div class="section-title text-center">
+                            <h2>Agregar Curso</h2>
+                        </div>
+                        <div class="row justify-content-center align-items-center">
+                            <div class="col-md-6 col-sm-12" style="padding: 0.5rem;">
+                                @Html.TextBoxFor(m => m.NombreCurso, new { @class = "form-control", @placeholder = "Nombre del curso", @type = "text", @required = "required" })
+                            </div>
+                        </div>
+                        <div class="row justify-content-center align-items-center">
+                            <div class="col-md-6 col-sm-12" style="padding: 0.5rem;">
+                                @Html.TextBoxFor(m => m.Activo, new { @class = "form-control", @type = "hidden", @Value = "true" })
+                            </div>
+                        </div>
+                        <div class="row justify-content-center align-items-center">
+                            <div class="col-12 text-center" style="padding: 0.5rem;">
+                                <input type="submit" class="btn btn-primary" value="Registrar">
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+        </div>
+    </section>
+</div>

@@ -1,0 +1,114 @@
+﻿@model ProyectoPlataformaWebCIDEP.Models.AvisosModel
+
+@{
+    ViewBag.Title = "Avisos";
+    Layout = "~/Views/Shared/_Authenticated.cshtml";
+    ViewBag.VistaActiva = "Comunicaciones";
+}
+
+<div class="container">
+    <div class="row" style="margin-bottom: 2rem;">
+        <div class="col-md-6 col-sm-6">
+            @if ((int)Session["ID_Rol"] != 1)
+            {
+                <h1 class="display-3">Avisos</h1>
+            }
+            else
+            {
+                <div class="dropdown">
+                    <button class="btn btn-primary btn-lg  dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Comunicados
+                    </button>
+
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="@Url.Action("CrearAvisoGeneral", "Avisos")">Agregar Comunicado</a>
+                    </div>
+
+                </div>
+            }
+
+        </div>
+        <div class="row justify-content-center">
+            <!-- Alerta de éxito -->
+            @if (!string.IsNullOrEmpty(ViewBag.respuesta))
+            {
+                <div class="col-md-8 offset-md-2">
+                    <div id="alerta" class="alert alert-info alert-dismissible fade show text-center" role="alert">
+                        @Html.Raw(ViewBag.respuesta)
+                    </div>
+                </div>
+            }
+
+            <script>
+                $(document).ready(function () {
+                    setTimeout(function () {
+                        $("#alerta").alert('close');
+                    }, 5000);
+                });
+            </script>
+        </div>
+
+    </div>
+
+
+    @if (Model.AvisoGeneral.Count() > 0)
+    {
+        <div class="row">
+            @foreach (var avisoGeneral in Model.AvisoGeneral)
+            {
+                if (avisoGeneral.Activo)
+                {
+                    <div class="col-md-4 col-sm-6">
+                        <div class="card" style="width: 18rem;">
+                            <div class="card-body">
+                                <h5 class="card-title">@avisoGeneral.Fecha_Publicacion.ToString("dd - MMMM - yyyy", new System.Globalization.CultureInfo("es-MX"))</h5>
+                                <p class="card-text">@avisoGeneral.Mensaje</p>
+                                @if ((int)Session["ID_Rol"] == 1)
+                                {
+                                    <a href="@Url.Action("EditarAvisoGeneral", "Avisos", new { ID_AvisoGeneral = avisoGeneral.ID_AvisoGeneral })" class="card-link">Editar</a>
+                                    using (Html.BeginForm("BorrarAvisoGeneral", "Avisos", FormMethod.Post))
+                                    {
+                                        @Html.Hidden("ID_AvisoGeneral", avisoGeneral.ID_AvisoGeneral)
+                                        <button type="submit" class="btn-link" style="border: none; background: none; padding: 0; color: red;">Desactivar</button>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            <h3>No hay registros</h3>
+        </div>
+    }
+</div>
+
+<script>
+  
+    const cards = document.querySelectorAll('.card');
+
+    function getMaxHeight(cards) {
+        let maxHeight = 0;
+        cards.forEach(card => {
+            const height = card.offsetHeight;
+            if (height > maxHeight) {
+                maxHeight = height;
+            }
+        });
+        return maxHeight;
+    }
+
+    function setMaxHeight(cards, maxHeight) {
+        cards.forEach(card => {
+            card.style.height = `${maxHeight}px`;
+        });
+    }
+    const maxHeight = getMaxHeight(cards);
+
+    setMaxHeight(cards, maxHeight);
+</script>
+

@@ -1,0 +1,37 @@
+﻿@model ProyectoPlataformaWebCIDEP.Entity.EstadoAsistenciaEntity
+
+@{
+    Layout = "~/Views/Shared/_Authenticated.cshtml";
+    ViewBag.VistaActiva = "Administracion";
+}
+
+
+<div class="container">
+    <section id="contact">
+        <div class="container">
+            <div class="row justify-content-center align-items-center">
+                <div class="col-md-6 col-sm-12">
+                    @using (Html.BeginForm("RegistrarEstadoAsistencia", "EstadosAsistencia", FormMethod.Post))
+                    {
+                        <div class="section-title text-center">
+                            <h2>Registrar Estado de Asistencia</h2>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="NombreEstado">Nombre del Estado de Asistencia:</label>
+                            @Html.TextBoxFor(m => m.NombreEstado, new { @class = "form-control", @placeholder = "Nombre del Estado de Asistencia", @type = "text" })
+                        </div>
+
+                        <div class="text-center">
+                            <input type="submit" class="btn btn-primary" value="Registrar">
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+
+
+

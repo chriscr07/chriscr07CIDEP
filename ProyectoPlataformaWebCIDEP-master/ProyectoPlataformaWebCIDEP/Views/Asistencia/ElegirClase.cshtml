@@ -1,0 +1,62 @@
+﻿
+@model ProyectoPlataformaWebCIDEP.Models.ClasesModel
+
+@{
+    ViewBag.Title = "ElegirClase";
+    Layout = "~/Views/Shared/_Authenticated.cshtml";
+    ViewBag.VistaActiva = "Asistencia";
+}
+
+
+<div class="col-md-12 col-sm-12">
+    <div class="row justify-content-center">
+        <!-- Alerta de éxito -->
+        @if (!string.IsNullOrEmpty(ViewBag.respuesta))
+        {
+            <div class="col-md-8 offset-md-2">
+                <div id="alerta" class="alert alert-info alert-dismissible fade show text-center" role="alert">
+                    @Html.Raw(ViewBag.respuesta)
+                </div>
+            </div>
+        }
+
+        <script>
+            $(document).ready(function () {
+                setTimeout(function () {
+                    $("#alerta").alert('close');
+                }, 5000);
+            });
+        </script>
+    </div>
+    <div class="row">
+        @foreach (var clase in Model.Clases)
+        {
+            <div class="col-lg-4 col-md-6 col-sm-12" style="padding: 0.5rem;">
+                <div class="card">
+                    <div class="card-header">
+                        Clase
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">@clase.NombreCurso</h5>
+                        <p class="card-text">@clase.NombreGrado</p>
+
+                        @if ((int)Session["ID_Rol"] == 3)
+                        {
+                            <a href="@Url.Action("Asistencia", "Asistencia", new { idClase = clase.ID_Clase })" class="btn btn-primary">Ver</a>
+                        }
+
+                        else
+                        {
+                            <a href="@Url.Action("Asistencia", "Asistencia", new { idClase = clase.ID_Clase })" class="btn btn-primary">Ver</a>
+                            if ((int)Session["ID_Rol"] != 3)
+                            {
+                                <a href="@Url.Action("ReportarEstudiantes", "Asistencia", new { idClase = clase.ID_Clase })" class="btn btn-primary">Agregar</a>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+
+    </div>
+</div>

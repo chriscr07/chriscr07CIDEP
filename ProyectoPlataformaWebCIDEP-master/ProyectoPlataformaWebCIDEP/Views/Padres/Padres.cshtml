@@ -1,0 +1,195 @@
+﻿
+@model ProyectoPlataformaWebCIDEP.Models.PadresModel
+
+@{
+    Layout = "~/Views/Shared/_Authenticated.cshtml";
+    ViewBag.VistaActiva = "Administracion";
+    var apiUrl = System.Configuration.ConfigurationManager.AppSettings["urlApi"].ToString();
+
+}
+
+
+<div class="container">
+    <div class="row" style="margin-bottom: 1rem;">
+        <div class="col-md-6 col-sm-6">
+            <div class="dropdown">
+                <button class="btn btn-primary btn-lg  dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Padres
+                </button>
+
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="@Url.Action("RegistrarPadre", "Padres")">Agregar Padre</a>
+                    <a class="dropdown-item import-link" href="#">Importar Padres</a>
+                    <a class="dropdown-item import-link" href="@Url.Action("VerEstudiantesPadres", "EstudiantesPadres")">Ver Padres con sus Estudiantes</a>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <!-- Alerta de éxito -->
+            @if (!string.IsNullOrEmpty(ViewBag.respuesta))
+            {
+                <div class="col-md-8 offset-md-2">
+                    <div id="alerta" class="alert alert-info alert-dismissible fade show text-center" role="alert">
+                        @Html.Raw(ViewBag.respuesta)
+                    </div>
+                </div>
+            }
+
+            <script>
+                $(document).ready(function () {
+                    setTimeout(function () {
+                        $("#alerta").alert('close');
+                    }, 5000);
+                });
+            </script>
+        </div>
+        <div class="col-md-6 col-sm-6" style="display:none;" id="formImportar">
+            <form id="uploadForm" enctype="multipart/form-data">
+                <input type="file" name="file" accept=".csv">
+                <button type="submit" class="btn btn-outline-primary mt-1">Importar</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 col-sm-12">
+            @if (Model.Padres.Count() > 0)
+            {
+                <table class="table table-bordered table-striped" id="table-demo">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Primer Apellido</th>
+                            <th>Segundo Apellido</th>
+                            <th>Correo Electrónico</th>
+                            <th>Número de Contacto</th>
+                            @if (Convert.ToInt32(Session["ID_Rol"]) == 1)
+                            {
+                                <th></th>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody id="myTable">
+                        @foreach (var padre in Model.Padres)
+                        {
+                            <tr>
+                                <td>@padre.Nombre</td>
+                                <td>@padre.PrimerApellido</td>
+                                <td>@padre.SegundoApellido</td>
+                                @if (padre.Email == null)
+                                {
+                                    <td>Sin registro</td>
+                                }
+                                else
+                                {
+                                    <td>@padre.Email</td>
+                                }
+                                @if (padre.Numero == null)
+                                {
+                                    <td>Sin registro</td>
+                                }
+                                else
+                                {
+                                    <td>@padre.Numero</td>
+                                }
+                                @if (Convert.ToInt32(Session["ID_Rol"]) == 1)
+                                {
+                                    <td>
+                                        <a href="@Url.Action("EditarPadre", "Padres", new { ID_Padre = padre.ID_Padre })">Editar</a>
+                                        @using (Html.BeginForm("EliminarPadre", "Padres", FormMethod.Post))
+                                        {
+                                            @Html.Hidden("ID_Padre", padre.ID_Padre)
+                                            <button type="submit" class="btn-link" style="border: none; background: none; padding: 0; color: red;">Eliminar</button>
+                                        }
+                                    </td>
+                                }
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <h3>No hay registros</h3>
+            }
+        </div>
+
+    </div>
+</div>
+<style>
+    .dataTables_filter input {
+        width: 30vw;
+    }
+</style>
+<script>
+    $(document).ready(function () {
+
+        var table = new DataTable('#table-demo', {
+            "paging": true,
+            "language": {
+                "lengthMenu": "Mostrar _MENU_ registros por página",
+                "zeroRecords": "No se encontraron registros",
+                "info": "Mostrando página _PAGE_ de _PAGES_",
+                "infoEmpty": "No hay registros disponibles",
+                "infoFiltered": "(filtrados de _MAX_ registros totales)",
+                "search": "Buscar:",
+                "searchPlaceholder": "Ingrese su búsqueda aquí",
+                "paginate": {
+                    "first": "Primero",
+                    "last": "Último",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                }
+            }
+        });
+
+
+    });
+</script>
+
+
+<script>
+
+    var urlApi = '@apiUrl';
+
+    document.querySelector('.import-link').addEventListener('click', function (event) {
+        event.preventDefault();
+
+        var formulario = document.getElementById('formImportar');
+
+        if (formulario.style.display == 'block') {
+            formulario.style.display = 'none';
+        }
+        else {
+            document.getElementById('formImportar').style.display = 'block';
+        }
+    });
+
+
+    document.getElementById('uploadForm').addEventListener('submit', async function (event) {
+        event.preventDefault();
+
+        var formData = new FormData(this);
+
+        try {
+            var response = await fetch(`${urlApi}ImportarPadres`, {
+                method: 'POST',
+                body: formData,
+                mode: 'cors'
+            });
+
+            // Agrega este console.log para ver la respuesta real
+            console.log(response);
+
+            var data = await response.json();
+            alert(data);
+            window.location.reload();
+        } catch (error) {
+            console.error('Error al enviar el archivo:', error);
+            alert('Error al enviar el archivo. Por favor, inténtalo de nuevo.');
+        }
+    });
+
+</script>
+

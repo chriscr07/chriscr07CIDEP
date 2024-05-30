@@ -1,0 +1,123 @@
+﻿@model ProyectoPlataformaWebCIDEP.Entity.AsistenciaEntity
+
+@{
+    Layout = "~/Views/Shared/_Authenticated.cshtml";
+    ViewBag.VistaActiva = "Asistencia";
+    var apiUrl = System.Configuration.ConfigurationManager.AppSettings["urlApi"].ToString();
+
+}
+
+<div class="container">
+    <section id="contact">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 col-sm-12">
+                    @using (Html.BeginForm("CrearAsistencia", "Asistencia", FormMethod.Post))
+                    {
+                        <div class="section-title text-center">
+                            <h2> Crear Asistencia </h2>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12" style="padding: 0.5rem;">
+                                <label for="Curso">Filtrar Estudiante:</label>
+                                <input id="txtFiltroEstudiante" type="text" class="form-control" placeholder="Ingrese su búsqueda">
+                            </div>
+                            <div class="col-md-6 col-sm-12" style="padding: 0.5rem;">
+                                <label for="Curso">Estudiante:</label>
+                                @Html.DropDownList("ID_Estudiante", ViewBag.ListaEstudiantes as SelectList, "Seleccione el estudiante", new { @class = "form-control", @required = "required", @id = "ddlEstudiante" })
+                            </div>
+                            <div class="col-md-6 col-sm-12" style="padding: 0.5rem;">
+                                <label for="ID_Estado">Estado de Asistencia:</label>
+                                @Html.DropDownList("ID_Estado", ViewBag.ListaEstadosAsistencia as SelectList, "Seleccione el Estado", new { @class = "form-control", @required = "required" })
+                            </div>
+                            <div class="col-md-6 col-sm-12" style="padding: 0.5rem;">
+                                <label for="Curso">Filtrar Clase:</label>
+                                <input id="txtFiltroClase" type="text" class="form-control" placeholder="Ingrese su búsqueda">
+                            </div>
+                            <div class="col-md-6 col-sm-12" style="padding: 0.5rem;">
+                                <label for="Clase">Clase:</label>
+                                @Html.DropDownList("ID_Clase", ViewBag.ListaClases as SelectList, "Seleccione la clase", new { @class = "form-control", @required = "required", @id = "ddlClase" })
+                            </div>
+
+                            <div class="col-12 text-center" style="padding: 0.5rem;">
+                                <input type="submit" class="btn btn-primary" value="Agregar">
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script>
+    var urlApi = '@apiUrl';
+
+    $(document).ready(function () {
+        $('#txtFiltroEstudiante').on('input', function () {
+            var filtro = $(this).val().toLowerCase();
+            $('#ddlEstudiante option').each(function () {
+                var opcion = $(this).text().toLowerCase();
+                var mostrar = opcion.includes(filtro);
+                $(this).toggle(mostrar);
+            });
+        });
+
+        $('#txtFiltroClase').on('input', function () {
+            var filtro = $(this).val().toLowerCase();
+            $('#ddlClase option').each(function () {
+                var opcion = $(this).text().toLowerCase();
+                var mostrar = opcion.includes(filtro);
+                $(this).toggle(mostrar);
+            });
+        });
+
+        $('#ddlEstudiante').change(function () {
+            var idEstudiante = $(this).val();
+
+            // Llamada AJAX
+            $.ajax({
+                url: `${urlApi}VerEstudiantesGrados`,
+                type: 'GET',
+                mode: 'cors',
+                dataType: 'json',
+                success: function (data) {
+                    console.log('Lista de estudiantes y grados obtenida:', data);
+                    filtrarClasesPorGrado(data, idEstudiante);
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    console.log('Error al obtener la lista de estudiantes y grados: ' + errorThrown);
+                }
+            });
+        });
+
+        // Restablecer el filtro cuando no se selecciona ningún estudiante
+        $('#ddlEstudiante').change(function () {
+            var idEstudiante = $(this).val();
+            if (!idEstudiante) {
+                $('#ddlClase option').show();
+            }
+        });
+    });
+
+    function filtrarClasesPorGrado(estudiantesGrados, idEstudiante) {
+        var nombreGrado;
+
+        for (var i = 0; i < estudiantesGrados.length; i++) {
+            if (estudiantesGrados[i].ID_Estudiante == idEstudiante) {
+                nombreGrado = estudiantesGrados[i].NombreGrado;
+                break;
+            }
+        }
+
+        console.log('Nombre de grado para el estudiante seleccionado:', nombreGrado);
+
+        $('#ddlClase option').each(function () {
+            var opcion = $(this).text().toLowerCase();
+            var mostrar = opcion.includes(nombreGrado.toLowerCase());
+            $(this).toggle(mostrar);
+        });
+    }
+
+</script>
+

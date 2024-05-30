@@ -1,0 +1,53 @@
+﻿@model ProyectoPlataformaWebCIDEP.Entity.ClaseEntity
+
+@{
+    Layout = "~/Views/Shared/_Authenticated.cshtml";
+    ViewBag.VistaActiva = "Administracion";
+}
+
+<div class="container">
+    <section id="contact">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 col-sm-12">
+                    @using (Html.BeginForm("EditarClase", "Clases", FormMethod.Post))
+                    {
+                        <div class="section-title text-center">
+                            <h2>Editar Clase</h2>
+                        </div>
+                        @Html.TextBoxFor(m => m.ID_Clase, new { @class = "form-control", @placeholder = "", @type = "hidden" })
+
+                        <div class="row">
+                            <div class="col-md-6 col-sm-12" style="padding: 0.5rem;">
+                                <label for="Curso">Curso:</label>
+                                @Html.DropDownList("ID_Curso", ViewBag.ListaCursos as SelectList, "Seleccione el curso", new { @class = "form-control", @required = "required" })
+                            </div>
+                            <div class="col-md-6 col-sm-12" style="padding: 0.5rem;">
+                                <label for="Grado">Grado:</label>
+                                @Html.DropDownList("ID_Grado", ViewBag.ListaGrados as SelectList, "Seleccione el grado", new { @class = "form-control", @required = "required" })
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12" style="padding: 0.5rem;">
+                                <label for="Activo">Seleccione el Estado:</label>
+                                @Html.DropDownListFor(m => m.Activo, new SelectList(new List<SelectListItem>
+                                {
+                                    new SelectListItem { Text = "Activo", Value = "true" },
+                                    new SelectListItem { Text = "Inactivo", Value = "false" }
+                                }, "Value", "Text"), "Seleccione el estado", new { @class = "form-control", @required = "required" })
+                            </div>
+                        </div>
+                        
+
+                        <div class="row justify-content-center align-items-center">
+                            <div class="col-12 text-center" style="padding: 0.5rem;">
+                                <input type="submit" class="btn btn-primary" value="Editar">
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+

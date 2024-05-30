@@ -1,0 +1,154 @@
+﻿
+@model ProyectoPlataformaWebCIDEP.Models.EstudiantesModel
+
+@{
+    Layout = "~/Views/Shared/_Authenticated.cshtml";
+    ViewBag.VistaActiva = "Calificaciones";
+    var apiUrl = System.Configuration.ConfigurationManager.AppSettings["urlApi"].ToString();
+
+}
+
+
+<div class="container">
+    <div class="row justify-content-center">
+        <!-- Alerta de éxito -->
+        @if (!string.IsNullOrEmpty(ViewBag.respuesta))
+        {
+            <div class="col-md-8 offset-md-2">
+                <div id="alerta" class="alert alert-info alert-dismissible fade show text-center" role="alert">
+                    @Html.Raw(ViewBag.respuesta)
+                </div>
+            </div>
+        }
+
+        <script>
+            $(document).ready(function () {
+                setTimeout(function () {
+                    $("#alerta").alert('close');
+                }, 5000);
+            });
+        </script>
+    </div>
+    <div class="row" style="margin-bottom: 1rem;">
+        <div class="col-md-6 col-sm-6">
+            <div class="dropdown">
+                <button class="btn btn-link dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <h2>Califique el Estudiante</h2>
+                </button>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <!-- Alerta de éxito -->
+            @if (!string.IsNullOrEmpty(ViewBag.respuesta))
+            {
+                <div class="col-md-8 offset-md-2">
+                    <div id="alerta" class="alert alert-info alert-dismissible fade show text-center" role="alert">
+                        @Html.Raw(ViewBag.respuesta)
+                    </div>
+                </div>
+            }
+
+            <script>
+                $(document).ready(function () {
+                    setTimeout(function () {
+                        $("#alerta").alert('close');
+                    }, 5000);
+                });
+            </script>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-12 col-sm-12">
+
+            @if (Model.Estudiantes.Count() > 0)
+            {
+
+                <table class="table table-bordered table-striped" id="table-demo">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Primer Apellido</th>
+                            <th>Segundo Apellido</th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+
+
+                        </tr>
+                    </thead>
+                    <tbody id="myTable">
+                        @foreach (var estudiante in Model.Estudiantes)
+                        {
+                            <tr>
+                                <td>@estudiante.Nombre</td>
+                                <td>@estudiante.PrimerApellido</td>
+                                <td>@estudiante.SegundoApellido</td>
+                                @using (Html.BeginForm("AgregarCalificacion", "Calificaciones", FormMethod.Post))
+                                {
+                                    <input type="hidden" name="ID_Clase" value="@Request.QueryString["idClase"]">
+                                    <input type="hidden" name="ID_TipoEvaluacion" value="@Request.QueryString["idEvaluacion"]">
+
+                                    <td>
+                                        <input id="ID_Estudiante" name="ID_Estudiante" type="hidden" value="@estudiante.ID_Estudiante">
+                                        <input id="Calificacion" name="Calificacion" type="number" class="form-control" placeholder="Calificación" step=".01" required>
+                                    </td>
+                                    <td>
+                                        <input id="PorcentajeTotal" name="PorcentajeTotal" type="number" class="form-control" placeholder="Porcentaje Total" step=".01" required>
+                                    </td>
+                                    <td>
+                                        <textarea id="Retroalimentacion" name="Retroalimentacion" class="form-control" placeholder="Retroalimentación" rows="1" required>Retroalimentación</textarea>
+
+                                    </td>
+                                    <td>
+                                        <input type="submit" class="btn btn-primary" value="Agregar">
+                                    </td>
+                                }
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <h3>No hay registros</h3>
+            }
+        </div>
+    </div>
+</div>
+
+<style>
+    .dataTables_filter input {
+        width: 30vw;
+    }
+</style>
+<script>
+    $(document).ready(function () {
+
+        var table = new DataTable('#table-demo', {
+            "paging": true,
+            "language": {
+                "lengthMenu": "Mostrar _MENU_ registros por página",
+                "zeroRecords": "No se encontraron registros",
+                "info": "Mostrando página _PAGE_ de _PAGES_",
+                "infoEmpty": "No hay registros disponibles",
+                "infoFiltered": "(filtrados de _MAX_ registros totales)",
+                "search": "Buscar:",
+                "searchPlaceholder": "Ingrese su búsqueda aquí",
+                "paginate": {
+                    "first": "Primero",
+                    "last": "Último",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                }
+            }
+        });
+
+
+    });
+</script>
+
+

@@ -1,0 +1,220 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>CIDEP</title>
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
+    <link rel="stylesheet" href="~/Template/assets/css/bootstrap.min.css">
+    <!--  <link rel="stylesheet" href="~/Template/css/font-awesome.min.css"> -->
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
+    <link rel="stylesheet" href="~/Template/assets/css/ready.css">
+    <link rel="stylesheet" href="~/Template/assets/css/demo.css">
+
+    <!--CALIFICACIONES <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">-->
+    <!-- jQuery -->
+    <script src='https://code.jquery.com/jquery-3.7.0.js'></script>
+    <!-- Data Table JS -->
+    <script src='https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js'></script>
+    <script src='https://cdn.datatables.net/responsive/2.1.0/js/dataTables.responsive.min.js'></script>
+    <script src='https://cdn.datatables.net/1.13.5/js/dataTables.bootstrap5.min.js'></script>
+
+    <link rel="icon" href="~/Template/CIDEPlogo.ico" type="image/x-icon">
+</head>
+<body style="background-color: #3f51b5">
+
+    <style>
+        .sidebar .nav-item a:hover {
+            background-color: #b3cfff;
+            color: #f2f3f8; /* Cambia el color del texto durante el hover */
+        }
+
+    </style>
+    <div class="wrapper">
+        <div class="main-header" style="background-color: #3f51b5; color: #f2f3f8;">
+            <div class="logo-header">
+                <a href="@Url.Action("Index","Home")" class="logo">
+                    CIDEP
+                </a>
+                <button class="navbar-toggler sidenav-toggler ml-auto" type="button" data-toggle="collapse" data-target="collapse" aria-controls="sidebar" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <button class="topbar-toggler more"><i class="la la-ellipsis-v"></i></button>
+            </div>
+            <nav class="navbar navbar-header navbar-expand-lg">
+                <div class="container-fluid">
+
+                   
+                    <ul style="color: #f2f3f8;" class="navbar-nav topbar-nav ml-md-auto align-items-center">
+
+                        <li style="color: #f2f3f8;" class="nav-item dropdown">
+                            <a style="color: #f2f3f8;" class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#" aria-expanded="false">
+                                <span>
+                                    @if (Session["Nombre"] != null)
+                                    {
+                                        <span style="color: #f2f3f8;" class="user-name">@Session["Nombre"]</span>
+                                    }
+                                    else
+                                    {
+                                        <span style="color: #f2f3f8;" class="user-name">@Session["Nombre_Usuario"]</span>
+                                    }
+
+                                </span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                                <li>
+                                    <div class="user-box">
+                                        <div class="u-text">
+                                            @if (Session["Nombre"] != null)
+                                            {
+                                                <h4>@Session["Nombre"]</h4>
+                                            }
+                                            else
+                                            {
+                                                <h4>@Session["Nombre_Usuario"]</h4>
+                                            }
+
+                                        </div>
+                                    </div>
+                                </li>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="@Url.Action("Perfil","Perfil")"><i class="ti-user"></i> Mi Perfil</a>
+                           
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="@Url.Action("CerrarSesion","Autenticacion")"><i class="fa fa-power-off"></i>Cerrar Sesión</a>
+                            </ul>
+                            <!-- /.dropdown-user -->
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+        <div class="sidebar" style="background-color: #3f51b5; color: #f2f3f8;">
+            <div class="scrollbar-inner sidebar-wrapper">
+                <div class="user" style="color: #f2f3f8;">
+                    <div class="info" style="color: #f2f3f8; margin: 0px;">
+                        <a style="color: #f2f3f8;" data-toggle="collapse" href="#collapseExample" aria-expanded="true">
+                            <span>
+                                @if (Session["Nombre"] != null)
+                                {
+                                    <span class="user-name">@Session["Nombre"]</span>
+                                }
+                                else
+                                {
+                                    <span class="user-name">@Session["Nombre_Usuario"]</span>
+                                }
+
+                                <span class="user-level">@Session["NombreRol"]</span>
+                                <span style="color: #f2f3f8!important;" class="caret"></span>
+                            </span>
+                        </a>
+                        <div class="clearfix"></div>
+
+                        <div class="collapse in" id="collapseExample" aria-expanded="true">
+                            <ul class="nav">
+                                <li>
+                                    <a href="@Url.Action("Perfil","Perfil")" style="color: #f2f3f8;">
+                                        <span class="link-collapse">Mi Perfil</span>
+                                    </a>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <ul class="nav" style="color: #f2f3f8;">
+                    <li class="nav-item @(ViewBag.VistaActiva == "Calificaciones" ? "active" : "")">
+                        <a href="@Url.Action("ElegirClase","Calificaciones")" style="color: #f2f3f8;">
+                            <i class="la la-graduation-cap" style="color: #f2f3f8;"></i>
+                            <p>Calificaciones</p>
+
+                        </a>
+                    </li>
+                    @if ((int)Session["ID_Rol"] == 3)
+                    {
+                        <li class="nav-item @(ViewBag.VistaActiva == "Asistencia" ? "active" : "")">
+                            <a href="@Url.Action("ElegirClase","Asistencia")" style="color: #f2f3f8;">
+                                <i class="la la-calendar-check-o" style="color: #f2f3f8;"></i>
+                                <p>Asistencia</p>
+                            </a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item @(ViewBag.VistaActiva == "Asistencia" ? "active" : "")">
+                            <a href="@Url.Action("ElegirClase","Asistencia")" style="color: #f2f3f8;">
+                                <i class="la la-calendar-check-o" style="color: #f2f3f8;"></i>
+                                <p>Asistencia</p>
+
+                            </a>
+                        </li>
+                    }
+                    <li class="nav-item @(ViewBag.VistaActiva == "Comunicaciones" ? "active" : "")">
+                        <a href="@Url.Action("Avisos", "Avisos")" style="color: #f2f3f8;">
+                            <i class="la la-commenting-o" style="color: #f2f3f8;"></i>
+                            <p>Comunicados</p>
+
+                        </a>
+                    </li>
+                    @if (Convert.ToInt32(Session["ID_Rol"]) != 3)
+                    {
+                        <li class="nav-item @(ViewBag.VistaActiva == "Informes" ? "active" : "")">
+                            <a href="@Url.Action("Informes", "Informes")" style="color: #f2f3f8;">
+                                <i class="la la-file-o" style="color: #f2f3f8;"></i>
+                                <p>Informes</p>
+
+                            </a>
+                        </li>
+                    }
+                    @if (Convert.ToInt32(Session["ID_Rol"]) == 1)
+                    {
+                        <li class="nav-item @(ViewBag.VistaActiva == "Administracion" ? "active" : "")">
+                            <a href="@Url.Action("Administracion", "Dashboard")" style="color: #f2f3f8;">
+                                <i class="la la-gears" style="color: #f2f3f8;"></i>
+                                <p>Administración</p>
+
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+
+
+        <div class="main-panel">
+            <div class="content">
+                <div class="container-fluid">
+
+                    <div class="row">
+                        @RenderBody()
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+    <script src="~/Template/assets/js/core/jquery.3.2.1.min.js"></script>
+    <script src="~/Template/assets/js/plugin/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
+    <script src="~/Template/assets/js/core/popper.min.js"></script>
+    <script src="~/Template/assets/js/core/bootstrap.min.js"></script>
+
+    <!--<script src="~/Template/assets/js/plugin/chartist/chartist.min.js"></script>
+          <script src="~/Template/assets/js/plugin/chartist/plugin/chartist-plugin-tooltip.min.js"></script> -->
+
+    <script src="~/Template/assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js"></script>
+    <script src="~/Template/assets/js/plugin/bootstrap-toggle/bootstrap-toggle.min.js"></script>
+    <script src="~/Template/assets/js/plugin/jquery-mapael/jquery.mapael.min.js"></script>
+    <script src="~/Template/assets/js/plugin/jquery-mapael/maps/world_countries.min.js"></script>
+    <script src="~/Template/assets/js/plugin/chart-circle/circles.min.js"></script>
+    <script src="~/Template/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
+    <script src="~/Template/assets/js/ready.min.js"></script>
+    <!--<script src="~/Template/assets/js/demo.js"></script>-->
+
+    <script src="~/Template/assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js"></script>
+
+</body>
+</html>

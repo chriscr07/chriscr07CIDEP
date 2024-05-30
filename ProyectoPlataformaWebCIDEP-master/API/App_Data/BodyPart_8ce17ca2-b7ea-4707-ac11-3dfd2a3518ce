@@ -1,0 +1,4 @@
+Cedula,Nombre,PrimerApellido,SegundoApellido,Fecha_Nacimiento,email
+1234567890,Docente1,Apellido1,Apellido2,1970-01-01,docente1@example.com
+2345678901,Docente2,Apellido3,Apellido4,1980-02-02,docente2@example.com
+3456789012,Docente3,Apellido5,Apellido6,1990-03-03,docente3@example.com

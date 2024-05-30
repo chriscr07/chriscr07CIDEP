@@ -1,0 +1,53 @@
+﻿
+@model ProyectoPlataformaWebCIDEP.Entity.PadreEntity
+
+@{
+    ViewBag.Title = "RegistrarEstudiante";
+    Layout = "~/Views/Shared/_Authenticated.cshtml";
+    ViewBag.VistaActiva = "Administracion";
+}
+
+<div class="container">
+    <section id="contact">
+        <div class="container">
+            <div class="row">         
+                <div class="col-md-12 col-sm-12">
+                    @using (Html.BeginForm("RegistrarPadre", "Padres", FormMethod.Post))
+                    {
+                        <div class="section-title text-center">
+                            <h2>Agregar Padre</h2>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-sm-12" style="padding: 0.5rem;">
+                                <label for="Nombre">Nombre:</label>
+                                @Html.TextBoxFor(m => m.Nombre, new { @class = "form-control", @type = "text", @placeholder = "Nombre", @required = "required" })
+                            </div>
+                            <div class="col-md-6 col-sm-12" style="padding: 0.5rem;">
+                                <label for="PrimerApellido">Primer Apellido:</label>
+                                @Html.TextBoxFor(m => m.PrimerApellido, new { @class = "form-control", @type = "text", @placeholder = "Primer Apellido", @required = "required" })
+                            </div>
+                            <div class="col-md-6 col-sm-12" style="padding: 0.5rem;">
+                                <label for="SegundoApellido">Segundo Apellido:</label>
+                                @Html.TextBoxFor(m => m.SegundoApellido, new { @class = "form-control", @type = "text", @placeholder = "Segundo Apellido", @required = "required" })
+                            </div>
+                            <div class="col-md-6 col-sm-12" style="padding: 0.5rem;">
+                                <label for="Numero">Número de Contacto:</label>
+                                @Html.TextBoxFor(m => m.Numero, new { @class = "form-control", @type = "tel", @placeholder = "Número de Contacto" })
+                            </div>
+                            <div class="col-md-12 col-sm-12" style="padding: 0.5rem;">
+                                <label for="Email">Correo Electrónico:</label>
+                                @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @type = "email", @placeholder = "Correo electrónico" })
+                            </div>
+                            <div class="col-12 text-center" style="padding: 0.5rem;">
+                                <input type="submit" class="btn btn-primary" value="Registrar">
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+
+

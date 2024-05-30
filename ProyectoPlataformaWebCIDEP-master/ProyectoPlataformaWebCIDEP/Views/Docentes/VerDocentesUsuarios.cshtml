@@ -1,0 +1,152 @@
+﻿
+@{
+    ViewBag.Title = "";
+    Layout = "~/Views/Shared/_Authenticated.cshtml";
+}
+
+
+@model ProyectoPlataformaWebCIDEP.Models.DocentesModel
+
+@{
+    Layout = "~/Views/Shared/_Authenticated.cshtml";
+    ViewBag.VistaActiva = "Administracion";
+}
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+<div class="container">
+
+    <div class="row" style="margin-bottom: 1rem;">
+        <div class="col-md-12 col-sm-6">
+            <h1 class="display-5">Docentes y Usuarios</h1>
+        </div>
+        <div class="row justify-content-center">
+            <!-- Alerta de éxito -->
+            @if (!string.IsNullOrEmpty(ViewBag.respuesta))
+            {
+                <div class="col-md-8 offset-md-2">
+                    <div id="alerta" class="alert alert-info alert-dismissible fade show text-center" role="alert">
+                        @Html.Raw(ViewBag.respuesta)
+                    </div>
+                </div>
+            }
+
+            <script>
+                $(document).ready(function () {
+                    setTimeout(function () {
+                        $("#alerta").alert('close');
+                    }, 5000);
+                });
+            </script>
+        </div>
+
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-12 col-sm-12">
+
+            @if (Model.Docentes.Count() > 0)
+            {
+
+                <table class="table table-bordered table-striped" id="table-demo">
+                    <thead>
+                        <tr>
+
+                            <th>Nombre</th>
+                            <th>Primer Apellido</th>
+                            <th>Segundo Apellido</th>
+                            <th>Usuario</th>
+                            @if (Convert.ToInt32(Session["ID_Rol"]) == 1)
+                            {
+                                <th></th>
+                            }
+
+                        </tr>
+                    </thead>
+                    <tbody id="myTable">
+                        @foreach (var docente in Model.Docentes)
+                        {
+                            <tr>
+
+                                <td>@docente.Nombre</td>
+                                <td>@docente.PrimerApellido</td>
+                                <td>@docente.SegundoApellido</td>
+                                <td>@docente.Nombre_Usuario</td>
+                                @if ((int)(Session["ID_Rol"]) == 1)
+                                {
+                                    <td>
+                                        @using (Html.BeginForm("DesenlazarUsuarioDocente", "Docentes", FormMethod.Post))
+                                        {
+                                            @Html.Hidden("ID_Docente", docente.ID_Docente)
+                                            <button type="submit" class="btn-link btn-desenlazar" style="border: none; background: none; padding: 0; color: red;">Desvincular Usuario</button>
+
+                                        }
+                                    </td>
+                                }
+
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <h3>No hay registros</h3>
+            }
+        </div>
+    </div>
+</div>
+
+<style>
+    .dataTables_filter input {
+        width: 30vw;
+    }
+</style>
+<script>
+    $(document).ready(function () {
+
+        var table = new DataTable('#table-demo', {
+            "paging": true,
+            "language": {
+                "lengthMenu": "Mostrar _MENU_ registros por página",
+                "zeroRecords": "No se encontraron registros",
+                "info": "Mostrando página _PAGE_ de _PAGES_",
+                "infoEmpty": "No hay registros disponibles",
+                "infoFiltered": "(filtrados de _MAX_ registros totales)",
+                "search": "Buscar:",
+                "searchPlaceholder": "Ingrese su búsqueda aquí",
+                "paginate": {
+                    "first": "Primero",
+                    "last": "Último",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                }
+            }
+        });
+
+
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        $(document).on('click', '.btn-desenlazar', function (e) {
+            e.preventDefault();
+            var confirmacion = confirm("¿Está seguro de que desea desvincular este usuario?");
+            if (confirmacion) {
+                $(this).closest('form').submit();
+            }
+        });
+    });
+</script>
+
+
+
+
+
+
+
+

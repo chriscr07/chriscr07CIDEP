@@ -1,0 +1,68 @@
+﻿
+@{
+    ViewBag.Title = "EditarDocente";
+    Layout = "~/Views/Shared/_Authenticated.cshtml";
+    ViewBag.VistaActiva = "Administracion";
+}
+
+@model ProyectoPlataformaWebCIDEP.Entity.DocenteEntity
+
+<div class="container">
+    <section id="contact">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 col-sm-12" id="llenadoAutomatico">
+                    @using (Html.BeginForm("EditarDocente", "Docentes", FormMethod.Post))
+                    {
+                        <div class="section-title text-center">
+                            <h2>Editar Docente</h2>
+                        </div>
+                        <div class="row">
+                            @Html.TextBoxFor(m => m.ID_Docente, new { @class = "form-control", @placeholder = "", @type = "hidden" })
+                            <div class="col-md-6 col-sm-12" style="padding: 0.5rem;">
+                                <label for="Cedula">Cédula:</label>
+                                @Html.TextBoxFor(m => m.Cedula, new { @class = "form-control", @placeholder = "Cédula", @type = "text", @required = "required", @id = "cedulaInput" })
+                            </div>
+                            <div class="col-md-6 col-sm-12" style="padding: 0.5rem;">
+                                <label for="Nombre">Nombre:</label>
+                                @Html.TextBoxFor(m => m.Nombre, new { @class = "form-control", @type = "text", @placeholder = "Nombre", @id = "nombreInput" })
+                            </div>
+                            <div class="col-md-6 col-sm-12" style="padding: 0.5rem;">
+                                <label for="PrimerApellido">Primer Apellido:</label>
+                                @Html.TextBoxFor(m => m.PrimerApellido, new { @class = "form-control", @type = "text", @placeholder = "Primer Apellido", @id = "primerApellidoInput" })
+                            </div>
+                            <div class="col-md-6 col-sm-12" style="padding: 0.5rem;">
+                                <label for="SegundoApellido">Segundo Apellido:</label>
+                                @Html.TextBoxFor(m => m.SegundoApellido, new { @class = "form-control", @type = "text", @placeholder = "Segundo Apellido", @id = "segundoApellidoInput" })
+                            </div>
+                            <div class="col-md-4 col-sm-12" style="padding: 0.5rem;">
+                                <label for="FechaNacimiento">Fecha de Nacimiento:</label>
+
+                                @Html.TextBoxFor(m => m.FechaNacimiento, "{0:yyyy-MM-dd}", new { @class = "form-control", @type = "date", @placeholder = "Fecha de Nacimiento" })
+                            </div>
+
+                            <div class="col-md-4 col-sm-12" style="padding: 0.5rem;">
+                                <label for="ID_Usuario">Usuario asociado:</label>
+                                @Html.DropDownList("ID_Usuario", ViewBag.listaUsuarios as SelectList, "Seleccione el usuario", new { @class = "form-control" })
+                            </div>
+                            <div class="col-md-4 col-sm-12" style="padding: 0.5rem;">
+                                <label for="Activo">Estado:</label>
+                                @Html.DropDownListFor(m => m.Activo, new SelectList(new List<SelectListItem>
+                                {
+                                    new SelectListItem { Text = "Activo", Value = "true" },
+                                    new SelectListItem { Text = "Inactivo", Value = "false" }
+                                }, "Value", "Text"), "Seleccione el estado", new { @class = "form-control", @required = "required" })
+                            </div>
+                            <div class="col-12 text-center" style="padding: 0.5rem;">
+                                <input type="submit" class="btn btn-primary" value="Editar">
+                            </div>
+                        </div>
+                    }
+                </div>
+
+            </div>
+        </div>
+    </section>
+</div>
+
+

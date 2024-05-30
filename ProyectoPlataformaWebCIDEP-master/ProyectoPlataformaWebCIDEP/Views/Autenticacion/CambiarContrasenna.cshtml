@@ -1,0 +1,131 @@
+﻿@model ProyectoPlataformaWebCIDEP.Entity.UsuarioEntity
+
+@{
+    ViewBag.Title = "CambiarContrasenna";
+    Layout = "~/Views/Shared/_Authenticated.cshtml";
+}
+
+<div class="container">
+    <section id="contact">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-sm-12">
+                @using (Html.BeginForm("CambiarContrasenna", "Autenticacion", FormMethod.Post))
+                {
+                    <div class="section-title text-center">
+                        <h2>Cambiar Contraseña</h2>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12" style="padding: 0.5rem;">
+                            <div class="input-group" id="show_hide_password_actual">
+                                @Html.TextBoxFor(m => m.ContrasennaActual, new { @class = "form-control", @placeholder = "Contraseña Actual", @type = "password", @required = "required" })
+                                <div class="input-group-append">
+                                    <button class="btn btn-secondary toggle-password" type="button"><i class="la la-eye"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-sm-12">
+                            <span id="passwordActualError" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12" style="padding: 0.5rem;">
+                            <div class="input-group" id="show_hide_password_nueva">
+                                @Html.TextBoxFor(m => m.NuevaContrasenna, new { @class = "form-control", @placeholder = "Nueva Contraseña", @type = "password", @required = "required", @id = "txtNuevaContrasenna" })
+                                <div class="input-group-append">
+                                    <button class="btn btn-secondary toggle-password" type="button"><i class="la la-eye"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-sm-12">
+                            <span id="passwordNuevaError" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12" style="padding: 0.5rem;">
+                            <div class="input-group" id="show_hide_password_confirmar">
+                                @Html.TextBox("ConfirmarContrasenna", "", new { @class = "form-control", @placeholder = "Confirmar Contraseña", @type = "password", @required = "required", @id = "txtConfirmarContrasenna" })
+                                <div class="input-group-append">
+                                    <button class="btn btn-secondary toggle-password" type="button"><i class="la la-eye"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-sm-12">
+                            <span id="passwordConfirmarError" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12 text-center" style="padding: 0.5rem;">
+                            <input type="submit" id="btnCambiar" class="btn btn-primary" value="Cambiar" style="display: none;">
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        function checkPasswords() {
+            var nuevaPassword = $("#txtNuevaContrasenna").val();
+            var confirmarPassword = $("#txtConfirmarContrasenna").val();
+
+            if (nuevaPassword === confirmarPassword && nuevaPassword !== '') {
+                $("#btnCambiar").show();
+            } else {
+                $("#btnCambiar").hide(); 
+            }
+        }
+
+ 
+        $("#txtNuevaContrasenna, #txtConfirmarContrasenna").keyup(checkPasswords);
+
+        $(".toggle-password").click(function () {
+            var input = $(this).closest(".input-group").find("input");
+            var icon = $(this).find("i");
+
+            if (input.attr("type") === "password") {
+                input.attr("type", "text");
+                icon.removeClass("la-eye");
+                icon.addClass("la-eye-slash");
+            } else {
+                input.attr("type", "password");
+                icon.removeClass("la-eye-slash");
+                icon.addClass("la-eye");
+            }
+        });
+
+        function validatePassword() {
+            var password = $("#txtNuevaContrasenna").val();
+            var confirmPassword = $("#txtConfirmarContrasenna").val();
+
+            var passwordNuevaError = $("#passwordNuevaError");
+            var passwordConfirmarError = $("#passwordConfirmarError");
+
+            var eightToTwelveChars = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@@#$%^&*])[a-zA-Z0-9!@@#$%^&*]{8,20}$/;
+            var isValidPassword = eightToTwelveChars.test(password);
+
+            if (!isValidPassword) {
+                passwordNuevaError.text("La contraseña debe tener entre 8 y 20 caracteres y contener al menos un número, una letra mayúscula y un carácter especial.");
+                passwordConfirmarError.text("");
+                $("#btnCambiar").hide();
+
+            } else if (password !== confirmPassword) {
+                passwordNuevaError.text("");
+                passwordConfirmarError.text("Las contraseñas no coinciden.");
+                $("#btnCambiar").hide();
+
+            } else {
+                passwordNuevaError.text("");
+                passwordConfirmarError.text("");
+                $("#btnCambiar").show();
+            }
+        }
+
+        $("#txtNuevaContrasenna, #txtConfirmarContrasenna").keyup(validatePassword);
+    });
+</script>

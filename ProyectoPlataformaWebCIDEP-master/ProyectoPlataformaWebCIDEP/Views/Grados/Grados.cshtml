@@ -1,0 +1,107 @@
+﻿
+@model ProyectoPlataformaWebCIDEP.Models.GradosModel
+
+@{
+    Layout = "~/Views/Shared/_Authenticated.cshtml";
+    ViewBag.VistaActiva = "Administracion";
+}
+
+
+
+<div class="container">
+    <div class="row mb-1">
+        <div class="col-md-6 col-sm-6">
+            <div class="dropdown">
+                <button class="btn btn-primary btn-lg  dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Grados
+                </button>
+
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="@Url.Action("RegistrarGrado", "Grados")">Agregar Grado</a>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <!-- Alerta de éxito -->
+            @if (!string.IsNullOrEmpty(ViewBag.respuesta))
+            {
+                <div class="col-md-8 offset-md-2">
+                    <div id="alerta" class="alert alert-info alert-dismissible fade show text-center" role="alert">
+                        @Html.Raw(ViewBag.respuesta)
+                    </div>
+                </div>
+            }
+
+            <script>
+                $(document).ready(function () {
+                    setTimeout(function () {
+                        $("#alerta").alert('close');
+                    }, 5000);
+                });
+            </script>
+        </div>
+    </div>
+
+    <div class="row">
+        @if (Model.Grados.Count() > 0)
+        {
+            <p>Ingrese una palabra clave para filtrar los resultados:</p>
+            <input class="form-control" id="myInput" type="text" placeholder="Buscar..">
+            <br>
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th> </th>
+                        <th>Grado</th>
+                        @if (Convert.ToInt32(Session["ID_Rol"]) == 1)
+                        {
+                            <th></th>
+                        }
+                    </tr>
+                </thead>
+                <tbody id="myTable">
+                    @foreach (var grado in Model.Grados)
+                    {
+                        <tr>
+                            <td>@grado.ID_Grado</td>
+                            <td>@grado.NombreGrado</td>
+                            @if (Convert.ToInt32(Session["ID_Rol"]) == 1)
+                            {
+                                <td>
+                                    <a href="@Url.Action("EditarGrado", "Grados", new { ID_Grado = grado.ID_Grado })">Editar</a>
+                                    @if (grado.Activo == true)
+                                    {
+                                        using (Html.BeginForm("DesactivarGrado", "Grados", FormMethod.Post))
+                                        {
+                                            @Html.Hidden("ID_Grado", grado.ID_Grado)
+                                            <button type="submit" class="btn-link" style="border: none; background: none; padding: 0; color: red;">Desactivar</button>
+                                        }
+                                    }
+                                </td>
+                            }
+
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <h3>No hay registros</h3>
+        }
+
+    </div>
+
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#myInput").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#myTable tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+</script>

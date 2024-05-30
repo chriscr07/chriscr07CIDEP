@@ -1,0 +1,140 @@
+﻿
+@{
+    ViewBag.Title = "VerEstudiantesPadres";
+    Layout = "~/Views/Shared/_Authenticated.cshtml";
+}
+
+
+@model ProyectoPlataformaWebCIDEP.Models.EstudiantesPadresModel
+
+@{
+    Layout = "~/Views/Shared/_Authenticated.cshtml";
+    ViewBag.VistaActiva = "Administracion";
+}
+
+
+<div class="container">
+
+    <div class="row" style="margin-bottom: 1rem;">
+        <div class="col-md-6 col-sm-6">
+            <div class="dropdown">
+                <button class="btn btn-primary btn-lg  dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Estudiantes y Padres
+                </button>
+
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+
+                    <a class="dropdown-item" href="@Url.Action("RegistrarEstudiantePadre", "EstudiantesPadres")">Agregar Relación de Padre y Estudiante</a>
+
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <!-- Alerta de éxito -->
+            @if (!string.IsNullOrEmpty(ViewBag.respuesta))
+            {
+                <div class="col-md-8 offset-md-2">
+                    <div id="alerta" class="alert alert-info alert-dismissible fade show text-center" role="alert">
+                        @Html.Raw(ViewBag.respuesta)
+                    </div>
+                </div>
+            }
+
+            <script>
+                $(document).ready(function () {
+                    setTimeout(function () {
+                        $("#alerta").alert('close');
+                    }, 5000);
+                });
+            </script>
+        </div>
+
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-12 col-sm-12">
+
+            @if (Model.EstudiantesPadres.Count() > 0)
+            {
+
+                <table class="table table-bordered table-striped" id="table-demo">
+                    <thead>
+                        <tr>
+
+                            <th>Nombre Estudiante</th>
+                            <th>Nombre Padre</th>
+                            @if (Convert.ToInt32(Session["ID_Rol"]) == 1)
+                            {
+                                <th></th>
+                            }
+
+                        </tr>
+                    </thead>
+                    <tbody id="myTable">
+                        @foreach (var estudiantePadre in Model.EstudiantesPadres)
+                        {
+                            <tr>
+
+                                <td>@estudiantePadre.Nombre @estudiantePadre.PrimerApellido @estudiantePadre.SegundoApellido</td>
+                                <td>@estudiantePadre.NombreP @estudiantePadre.PrimerApellidoP @estudiantePadre.SegundoApellidoP</td>
+                                @if (Convert.ToInt32(Session["ID_Rol"]) == 1)
+                                {
+                                    <td>
+                                        @using (Html.BeginForm("EliminarEstudiantePadre", "EstudiantesPadres", FormMethod.Post))
+                                        {
+                                            @Html.Hidden("ID_EstudiantePadre", estudiantePadre.ID_EstudiantePadre)
+                                            <button type="submit" class="btn-link" style="border: none; background: none; padding: 0; color: red;">Eliminar</button>
+                                        }
+                                    </td>
+                                }
+
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <h3>No hay registros</h3>
+            }
+        </div>
+    </div>
+</div>
+
+<style>
+    .dataTables_filter input {
+        width: 30vw;
+    }
+</style>
+<script>
+    $(document).ready(function () {
+
+        var table = new DataTable('#table-demo', {
+            "paging": true,
+            "language": {
+                "lengthMenu": "Mostrar _MENU_ registros por página",
+                "zeroRecords": "No se encontraron registros",
+                "info": "Mostrando página _PAGE_ de _PAGES_",
+                "infoEmpty": "No hay registros disponibles",
+                "infoFiltered": "(filtrados de _MAX_ registros totales)",
+                "search": "Buscar:",
+                "searchPlaceholder": "Ingrese su búsqueda aquí",
+                "paginate": {
+                    "first": "Primero",
+                    "last": "Último",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                }
+            }
+        });
+
+
+    });
+</script>
+
+
+
+
+

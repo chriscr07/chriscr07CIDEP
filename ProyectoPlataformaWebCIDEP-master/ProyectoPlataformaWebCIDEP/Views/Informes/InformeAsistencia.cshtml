@@ -1,0 +1,174 @@
+﻿@model ProyectoPlataformaWebCIDEP.Entity.AsistenciaEntity
+
+
+@{
+    ViewBag.Title = "Main";
+    Layout = "~/Views/Shared/_Authenticated.cshtml";
+    ViewBag.VistaActiva = "Informes";
+}
+
+
+<div class="container">
+    <div class="row" style="margin-bottom: 1rem;">
+        <div class="col-md-12 col-sm-12" style="padding: 0.5rem;">
+            <h2>Informe de Asistencia</h2>
+        </div>
+    </div>
+    <div class="row mb-5">
+        <div class="col-md-4 col-sm-6">
+            <button id="verEstudiante" type="button" class="btn btn-primary">Ver por Estudiante</button>
+        </div>
+        <div class="col-md-4 col-sm-6">
+            <button id="verClase" type="button" class="btn btn-primary">Ver por Clase</button>
+        </div>
+        <div class="col-md-4 col-sm-6">
+            <button id="verGrado" type="button" class="btn btn-primary">Ver por Grado</button>
+        </div>
+    </div>
+    <div class="row">
+        <div id="student" class="col-md-12 col-sm-12" style="display: none;">
+            @using (Html.BeginForm("GenerarCSVAsistenciaEstudiante", "Informes", FormMethod.Get))
+            {
+                <div class="row">
+                    <div class="col-md-6 col-sm-12 mb-3">
+                        <label for="Curso">Filtrar Estudiante:</label>
+                        <input id="txtFiltroEstudiante" type="text" class="form-control" placeholder="Ingrese su búsqueda">
+                    </div>
+                    <div class="col-md-6 col-sm-12  mb-3">
+                        <label for="Estudiante">Estudiante:</label>
+                        @Html.DropDownList("idEstudiante", ViewBag.ListaEstudiantesAsistencia as SelectList, "Seleccione el estudiante", new { @class = "form-control", @required = "required", @id = "ddlEstudiante" })
+                    </div>
+                    <div class="col-md-6 col-sm-12  mb-3">
+                        <label for="FechaInicio">Fecha de Inicio:</label>
+                        @Html.TextBoxFor(m => m.FechaInicio, new { @class = "form-control", @type = "date" })
+                    </div>
+                    <div class="col-md-6 col-sm-12  mb-3">
+                        <label for="FechaFin">Fecha de Finalización:</label>
+                        @Html.TextBoxFor(m => m.FechaFin, new { @class = "form-control", @type = "date" })
+                    </div>
+                    <div class="col-md-6 col-sm-12">
+                        <button type="submit" class="btn btn-primary" style="margin: 1rem 0 1rem 0;">Generar Informe</button>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div id="class" class="col-md-12 col-sm-12" style="display: none;">
+            @using (Html.BeginForm("GenerarCSVAsistenciaClase", "Informes", FormMethod.Get))
+            {
+                <div class="row">
+                    <div class="col-md-6 col-sm-12 mb-3">
+                        <label for="Clase">Filtrar Clase:</label>
+                        <input id="txtFiltroClase" type="text" class="form-control" placeholder="Ingrese su búsqueda">
+                    </div>
+                    <div class="col-md-6 col-sm-12  mb-3">
+                        <label for="Clase">Clase:</label>
+                        @Html.DropDownList("idClase", ViewBag.ListaClasesAsistencia as SelectList, "Seleccione la clase", new { @class = "form-control", @required = "required", @id = "ddlClase" })
+                    </div>
+                    <div class="col-md-6 col-sm-12  mb-3">
+                        <label for="FechaInicio">Fecha de Inicio:</label>
+                        @Html.TextBoxFor(m => m.FechaInicio, new { @class = "form-control", @type = "date" })
+                    </div>
+                    <div class="col-md-6 col-sm-12  mb-3">
+                        <label for="FechaFin">Fecha de Finalización:</label>
+                        @Html.TextBoxFor(m => m.FechaFin, new { @class = "form-control", @type = "date" })
+                    </div>
+                    <div class="col-md-6 col-sm-12">
+                        <button type="submit" class="btn btn-primary" style="margin: 1rem 0 1rem 0;">Generar Informe</button>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div id="grade" class="col-md-12 col-sm-12" style="display:none;">
+            @using (Html.BeginForm("GenerarCSVAsistenciaGrado", "Informes", FormMethod.Get))
+            {
+                <div class="row">
+                    <div class="col-md-6 col-sm-12 mb-3">
+                        <label for="Grado">Filtrar Grado:</label>
+                        <input id="txtFiltroGrado" type="text" class="form-control" placeholder="Ingrese su búsqueda">
+                    </div>
+                    <div class="col-md-6 col-sm-12  mb-3">
+                        <label for="Grado">Grado:</label>
+                        @Html.DropDownList("idGrado", ViewBag.ListaGradosAsistencia as SelectList, "Seleccione el grado", new { @class = "form-control", @required = "required", @id = "ddlGrado" })
+                    </div>
+                    <div class="col-md-6 col-sm-12  mb-3">
+                        <label for="FechaInicio">Fecha de Inicio:</label>
+                        @Html.TextBoxFor(m => m.FechaInicio, new { @class = "form-control", @type = "date" })
+                    </div>
+                    <div class="col-md-6 col-sm-12  mb-3">
+                        <label for="FechaFin">Fecha de Finalización:</label>
+                        @Html.TextBoxFor(m => m.FechaFin, new { @class = "form-control", @type = "date" })
+                    </div>
+                    <div class="col-md-6 col-sm-12">
+                        <button type="submit" class="btn btn-primary" style="margin: 1rem 0 1rem 0;">Generar Informe</button>
+                    </div>
+                </div>
+            }
+        </div>
+
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        $('#txtFiltroEstudiante').on('input', function () {
+            var filtro = $(this).val().toLowerCase();
+            $('#ddlEstudiante option').each(function () {
+                var opcion = $(this).text().toLowerCase();
+                var mostrar = opcion.includes(filtro);
+                $(this).toggle(mostrar);
+            });
+        });
+
+        $('#txtFiltroClase').on('input', function () {
+            var filtro = $(this).val().toLowerCase();
+            $('#ddlClase option').each(function () {
+                var opcion = $(this).text().toLowerCase();
+                var mostrar = opcion.includes(filtro);
+                $(this).toggle(mostrar);
+            });
+        });
+
+        $('#txtFiltroGrado').on('input', function () {
+            var filtro = $(this).val().toLowerCase();
+            $('#ddlGrado option').each(function () {
+                var opcion = $(this).text().toLowerCase();
+                var mostrar = opcion.includes(filtro);
+                $(this).toggle(mostrar);
+            });
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        $('#verEstudiante').click(function () {
+            $(this).prop('disabled', true);
+            $('#verClase').prop('disabled', false);
+            $('#verGrado').prop('disabled', false);
+            $('#student').show();
+            $('#class').hide();
+            $('#grade').hide();
+        });
+
+        $('#verClase').click(function () {
+            $(this).prop('disabled', true);
+            $('#verEstudiante').prop('disabled', false);
+            $('#verGrado').prop('disabled', false);
+            $('#student').hide();
+            $('#class').show();
+            $('#grade').hide();
+        });
+
+        $('#verGrado').click(function () {
+            $(this).prop('disabled', true);
+            $('#verEstudiante').prop('disabled', false);
+            $('#verClase').prop('disabled', false);
+            $('#student').hide();
+            $('#class').hide();
+            $('#grade').show();
+        });
+    });
+</script>

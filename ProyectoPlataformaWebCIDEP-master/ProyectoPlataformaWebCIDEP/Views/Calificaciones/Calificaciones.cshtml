@@ -1,0 +1,203 @@
+﻿
+@model ProyectoPlataformaWebCIDEP.Models.CalificacionesModel
+
+@{
+    ViewBag.Title = "Calificaciones";
+    ViewBag.VistaActiva = "Calificaciones";
+    Layout = "~/Views/Shared/_Authenticated.cshtml";
+    var apiUrl = System.Configuration.ConfigurationManager.AppSettings["urlApi"].ToString();
+}
+
+
+<div class="container">
+    <div class="row" style="margin-bottom: 1rem;">
+        @if ((int)Session["ID_Rol"] == 2 && Session["IDstudentTeacher"] != null)
+        {
+            <input type="hidden" id="idDocente" value="@Session["IDstudentTeacher"]" />
+        }
+        
+    <div class="col-md-6 col-sm-6">
+        <h1 class="display-3">Calificaciones</h1>     
+    </div>
+
+        <div class="row justify-content-center">
+            <!-- Alerta de éxito -->
+            @if (!string.IsNullOrEmpty(ViewBag.respuesta))
+            {
+                <div class="col-md-8 offset-md-2">
+                    <div id="alerta" class="alert alert-info alert-dismissible fade show text-center" role="alert">
+                        @Html.Raw(ViewBag.respuesta)
+                    </div>
+                </div>
+            }
+
+            <script>
+                $(document).ready(function () {
+                    setTimeout(function () {
+                        $("#alerta").alert('close');
+                    }, 5000);
+                });
+            </script>
+        </div>
+        <div class="row justify-content-center" style="display:none;">
+            <!-- Alerta de éxito -->
+
+            <div class="col-md-8 offset-md-2">
+                <div id="alertaOtra" class="alert alert-danger alert-dismissible fade show text-center" role="alert">
+                </div>
+            </div>
+
+
+            <script>
+                $(document).ready(function () {
+                    setTimeout(function () {
+                        $("#alertaOtra").alert('close');
+                    }, 5000);
+                });
+            </script>
+        </div>
+
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-4 col-sm-12 mb-4">
+            <label>Seleccione el tipo de evaluación:</label>
+        </div>
+        <div class="col-md-4 col-sm-12 mb-4">
+            @Html.DropDownList("ID_TipoEvaluacion", ViewBag.ListaTiposEvaluaciones as SelectList, "", new { @class = "form-control", @required = "required" })
+        </div>
+        <div class="col-md-2 col-sm-12 mb-4">
+            <input type="submit" id="btnFiltrar" class="btn btn-primary" value="Filtrar">
+        </div>
+        <div class="col-md-2 col-sm-12 mb-4">
+            <input type="submit" id="btnBorrar" class="btn btn-danger" value="Borrar Filtro">
+        </div>
+        <div class="col-md-12 col-sm-12">
+            @if (Model.Calificaciones.Count() > 0)
+            {
+
+                <table class="table table-bordered table-striped  table-hover nowrap" style="width:100%" id="table-demo">
+                    <thead>
+                        <tr>
+                            <th>Estudiante</th>
+                            <th>Curso</th>
+                            <th>Grado</th>
+                            <th>Calificación</th>
+                            <th>Tipo de Evaluación</th>
+                            <th>Porcentaje</th>
+                            <th>Retroalimentación</th>
+                            <th>Fecha</th>
+
+                            @if ((int)(Session["ID_Rol"]) != 3)
+                            {
+                                <th></th>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody id="myTable">
+                        @foreach (var calificacion in Model.Calificaciones)
+                        {
+                            <tr>
+                                <td>@calificacion.Estudiante</td>
+                                <td>@calificacion.NombreCurso</td>
+                                <td>@calificacion.NombreGrado</td>
+                                <td>@calificacion.Calificacion</td>
+                                <td>@calificacion.TipoEvaluacion</td>
+                                <td>@calificacion.PorcentajeTotal</td>
+                                <td>@calificacion.Retroalimentacion</td>
+                                <td>@calificacion.FechaCalificacion.ToString("dd - MMMM - yyyy", new System.Globalization.CultureInfo("es-MX"))</td>
+
+                                @if ((int)(Session["ID_Rol"]) != 3)
+                                {
+                                    <td>
+                                        <a href="@Url.Action("EditarCalificacion", "Calificaciones", new { ID_calificacion = calificacion.ID_Calificacion })">Editar</a>
+                                        @using (Html.BeginForm("EliminarCalificacion", "Calificaciones", FormMethod.Post))
+                                        {
+                                            @Html.Hidden("ID_Calificacion", calificacion.ID_Calificacion)
+                                            <button type="submit" class="btn-link" style="border: none; background: none; padding: 0; color: red;">Eliminar</button>
+                                        }
+                                    </td>
+                                }
+
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <h3>No hay registros</h3>
+            }
+        </div>
+    </div>
+
+</div>
+
+<style>
+    .dataTables_filter input {
+        width: 30vw;
+    }
+</style>
+<script>
+    $(document).ready(function () {
+        var table = new DataTable('#table-demo', {
+            responsive: true,
+            columnDefs: [
+                { responsivePriority: 1, targets: 3 },
+                { responsivePriority: 10001, targets: 4 },
+                { responsivePriority: 2, targets: -1 }
+            ],
+            paging: true,
+            language: {
+                lengthMenu: "Mostrar _MENU_ registros por página",
+                zeroRecords: "No se encontraron registros",
+                info: "Mostrando página _PAGE_ de _PAGES_",
+                infoEmpty: "No hay registros disponibles",
+                infoFiltered: "(filtrados de _MAX_ registros totales)",
+                search: "Buscar:",
+                searchPlaceholder: "Ingrese su búsqueda aquí",
+                paginate: {
+                    first: "Primero",
+                    last: "Último",
+                    next: "Siguiente",
+                    previous: "Anterior"
+                }
+            }
+        });
+    });
+
+
+</script>
+<script>
+    $(document).ready(function () {
+        $('#btnFiltrar').click(function () {
+            var tipoEvaluacionID = $('#ID_TipoEvaluacion').val();
+            var tipoEvaluacionTexto = $('#ID_TipoEvaluacion option:selected').text();
+          
+            $('#myTable tr').each(function () {
+                var cell = $(this).find('td:nth-child(5)'); 
+                var texto = cell.text().trim();
+
+                if (texto !== tipoEvaluacionTexto && tipoEvaluacionID !== "Seleccione el Tipo de Evaluación") {
+                    $(this).hide();
+                } else {
+                    $(this).show();
+                }
+            });
+
+            $('#btnBorrar').click(function () {
+                $('#myTable tr').show();
+
+                $('#ID_TipoEvaluacion').val('0');
+            });
+
+        });
+    });
+</script>
+
+
+
+
+

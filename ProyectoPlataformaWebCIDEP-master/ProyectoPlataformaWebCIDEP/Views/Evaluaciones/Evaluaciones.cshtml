@@ -1,0 +1,129 @@
+﻿
+@model ProyectoPlataformaWebCIDEP.Models.EvaluacionesModel
+
+@{
+    Layout = "~/Views/Shared/_Authenticated.cshtml";
+    ViewBag.VistaActiva = "Administracion";
+}
+
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 col-sm-6">
+            <div class="dropdown">
+                <button class="btn btn-primary btn-lg  dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Tipos de Evaluaciones
+                </button>
+
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="@Url.Action("RegistrarEvaluacion", "Evaluaciones")">Agregar Evaluación</a>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <!-- Alerta de éxito -->
+            @if (!string.IsNullOrEmpty(ViewBag.respuesta))
+            {
+                <div class="col-md-8 offset-md-2">
+                    <div id="alerta" class="alert alert-info alert-dismissible fade show text-center" role="alert">
+                        @Html.Raw(ViewBag.respuesta)
+                    </div>
+                </div>
+            }
+
+            <script>
+                $(document).ready(function () {
+                    setTimeout(function () {
+                        $("#alerta").alert('close');
+                    }, 5000);
+                });
+            </script>
+        </div>
+    </div>
+
+    <div>
+        <div class="row">
+            <div class="col-md-12 col-sm-12">
+
+                @if (Model.Evaluaciones.Count() > 0)
+                {
+
+                    <table class="table table-bordered table-striped" id="table-demo">
+                        <thead>
+                            <tr>
+                                <th> </th>
+                                <th>Evaluación</th>
+                                @if (Convert.ToInt32(Session["ID_Rol"]) == 1)
+                                {
+                                    <th></th>
+                                }
+                            </tr>
+                        </thead>
+                        <tbody id="myTable">
+                            @foreach (var evaluacion in Model.Evaluaciones)
+                            {
+                                <tr>
+                                    <td>@evaluacion.ID_TipoEvaluacion</td>
+                                    <td>@evaluacion.Descripcion</td>
+                                    @if (Convert.ToInt32(Session["ID_Rol"]) == 1)
+                                    {
+                                        <td>
+                                            <a href="@Url.Action("EditarEvaluacion", "Evaluaciones", new { ID_TipoEvaluacion = evaluacion.ID_TipoEvaluacion })">Editar</a>
+                                            @if (evaluacion.Activo == true)
+                                            {
+
+                                                using (Html.BeginForm("DesactivarEvaluacion", "Evaluaciones", FormMethod.Post))
+                                                {
+                                                    @Html.Hidden("ID_TipoEvaluacion", evaluacion.ID_TipoEvaluacion)
+                                                    <button type="submit" class="btn-link" style="border: none; background: none; padding: 0; color: red;">Desactivar</button>
+                                                }
+                                            }
+                                        </td>
+                                    }
+
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <h3>No hay registros</h3>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .dataTables_filter input {
+        width: 30vw;
+    }
+</style>
+<script>
+    $(document).ready(function () {
+
+        var table = new DataTable('#table-demo', {
+            "paging": true,
+            "language": {
+                "lengthMenu": "Mostrar _MENU_ registros por página",
+                "zeroRecords": "No se encontraron registros",
+                "info": "Mostrando página _PAGE_ de _PAGES_",
+                "infoEmpty": "No hay registros disponibles",
+                "infoFiltered": "(filtrados de _MAX_ registros totales)",
+                "search": "Buscar:",
+                "searchPlaceholder": "Ingrese su búsqueda aquí",
+                "paginate": {
+                    "first": "Primero",
+                    "last": "Último",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                }
+            }
+        });
+
+
+    });
+</script>
